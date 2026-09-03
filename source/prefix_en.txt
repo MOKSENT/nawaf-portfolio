@@ -1,8 +1,0 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Nawaf Al-Shareif, data analyst and business systems designer. Operating systems, dashboards, automation and feasibility studies for SMEs in Saudi Arabia and the GCC.">
-<meta name="theme-color" content="#0D1015">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
