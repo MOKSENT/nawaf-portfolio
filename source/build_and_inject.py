@@ -198,6 +198,7 @@ tokens = {
 }
 
 for tpl,out in TARGETS:
+    os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(tpl,"r",encoding="utf-8") as f: html=f.read()
     for k,v in tokens.items():
         html=html.replace(k,v)
