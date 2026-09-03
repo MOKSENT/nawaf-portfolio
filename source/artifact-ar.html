@@ -1,0 +1,1822 @@
+<title>نواف الشريف — انظمة بيانات واتمتة اعمال</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+/* نواف الشريف — من التبعثر الى النظام — v2 */
+:root{
+  --dark:#0D1015; --dark2:#12161D;
+  --light:#F4F5F1; --light2:#ECEDE7;
+  --ink:#15181D; --white:#F2F4F7;
+  --dim-d:#79828F; --dim-l:#5F656B; --faint-l:#9AA0A4;
+  --blue:#2E5CFF; --blue-hover:#1F49E6; --blue-soft:rgba(46,92,255,.09);
+  --line-l:#DCDED7; --line-d:rgba(255,255,255,.09);
+  --sans:'Alexandria',system-ui,sans-serif;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-io:cubic-bezier(.65,0,.35,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--dark);font-family:var(--sans);color:var(--ink);font-size:16px;line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--blue);color:#fff}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+img{max-width:100%}
+a{-webkit-tap-highlight-color:transparent}
+
+/* ══ nav ══ */
+.nav{position:fixed;top:0;inset-inline:0;z-index:80;display:flex;align-items:center;justify-content:space-between;
+  padding:18px 4vw;mix-blend-mode:difference;color:#fff}
+.nav .name{font-weight:800;font-size:17px;letter-spacing:-.2px;color:#fff;text-decoration:none}
+.nav .links{display:flex;gap:26px;align-items:center}
+.nav .links a{color:#fff;text-decoration:none;font-size:13.5px;font-weight:300;opacity:.85;transition:opacity .2s}
+.nav .links a:hover,.nav .links a:focus-visible{opacity:1}
+.nav .lang{font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.45);padding:4px 12px;border-radius:999px;
+  color:#fff;text-decoration:none;transition:background .2s}
+.nav .lang:hover{background:rgba(255,255,255,.15)}
+.nav .burger{display:none;background:none;border:0;color:#fff;font-family:var(--sans);font-size:13px;cursor:pointer}
+
+/* mobile menu */
+.mmenu{position:fixed;inset:0;z-index:90;background:var(--ink);display:none;flex-direction:column;
+  justify-content:center;gap:8px;padding:0 8vw}
+.mmenu.open{display:flex}
+.mmenu a{color:var(--light);text-decoration:none;font-size:30px;font-weight:800;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.mmenu .close{position:absolute;top:22px;inset-inline-end:6vw;background:none;border:0;color:#fff;font-size:15px;font-family:var(--sans);cursor:pointer}
+
+/* ══ hero transform scene ══ */
+#scene{position:relative;height:100dvh;overflow:hidden;background:var(--dark)}
+#cv{position:absolute;inset:0;width:100%;height:100%}
+.headline{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:0 5vw;pointer-events:none}
+.headline h1,.headline .h1{font-weight:900;font-size:clamp(36px,7vw,96px);line-height:1.3;letter-spacing:-.02em;text-wrap:balance}
+.hl-a{color:var(--white)}
+.hl-a .sub{display:block;font-size:clamp(14px,1.6vw,20px);font-weight:300;color:var(--dim-d);margin-top:24px;letter-spacing:0;line-height:1.9}
+.hl-b{color:var(--ink);opacity:0}
+.hl-b .accent{color:var(--blue)}
+.hl-b .sub{display:block;font-size:clamp(14px,1.6vw,20px);font-weight:300;color:var(--dim-l);margin-top:24px;line-height:1.9}
+.hero-static{height:auto;min-height:70dvh;display:grid;place-items:center;padding:140px 5vw 80px}
+
+/* ══ light world ══ */
+.light-world{background:var(--light);color:var(--ink)}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:4vw}
+
+/* metrics */
+.metrics-wrap{padding:96px 4vw 40px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);max-width:1280px;margin:0 auto;border-inline:1px solid var(--line-l)}
+.m{padding:52px 26px;border-inline-start:1px solid var(--line-l);text-align:center}
+.m:first-child{border-inline-start:none}
+.m .v{font-weight:900;font-size:clamp(30px,3.4vw,52px);letter-spacing:-.02em}
+.m .v i{font-style:normal;color:var(--blue);font-weight:600;font-size:.6em}
+.m .l{font-weight:300;color:var(--dim-l);font-size:14px;margin-top:8px}
+.m .src{font-size:11.5px;color:var(--faint-l);margin-top:4px}
+.m .src a{color:inherit}
+
+/* section headers */
+.sec-head{max-width:1280px;margin:0 auto 36px;padding:0 4vw}
+.sec-head h2{font-weight:800;font-size:clamp(26px,3.2vw,42px);letter-spacing:-.02em;text-wrap:balance}
+.sec-head p{font-weight:300;color:var(--dim-l);margin-top:10px;max-width:62ch}
+
+/* ══ kinetic project list ══ */
+.list-wrap{padding:80px 0 40px}
+.plist{border-top:1px solid var(--line-l)}
+.prow{display:flex;align-items:center;gap:4vw;justify-content:space-between;width:100%;text-align:inherit;
+  background:none;border:0;border-bottom:1px solid var(--line-l);padding:32px 4vw;position:relative;overflow:hidden;
+  cursor:pointer;color:var(--ink);font-family:var(--sans);transition:color .25s}
+.prow::before{content:'';position:absolute;inset:0;background:var(--ink);transform:scaleY(0);transform-origin:bottom;
+  transition:transform .38s var(--ease-io);z-index:0}
+.prow:hover::before,.prow:focus-visible::before{transform:scaleY(1)}
+.prow>*{position:relative;z-index:1}
+.prow:hover,.prow:focus-visible{color:var(--light)}
+.prow:focus-visible{outline:none}
+.prow .t{font-weight:800;font-size:clamp(21px,3.2vw,42px);letter-spacing:-.02em;line-height:1.35}
+.prow .meta{display:flex;align-items:baseline;gap:20px;flex-shrink:0}
+.prow .stat{font-weight:900;font-size:clamp(17px,2.1vw,28px);color:var(--blue);transition:color .25s}
+.prow:hover .stat{color:#7B9BFF}
+.prow .cat{font-weight:300;font-size:13px;color:var(--dim-l);transition:color .25s}
+.prow:hover .cat{color:#AEB6C2}
+.archive-link{display:flex;justify-content:center;padding:40px 4vw 0}
+.archive-link a{color:var(--ink);text-decoration:none;font-weight:600;font-size:15.5px;border:1px solid var(--ink);
+  padding:14px 34px;border-radius:999px;transition:all .22s}
+.archive-link a:hover{background:var(--ink);color:var(--light)}
+
+/* ══ case overlay ══ */
+.overlay{position:fixed;inset:0;z-index:100;display:none}
+.overlay.open{display:block}
+.overlay .backdrop{position:absolute;inset:0;background:rgba(13,16,21,.6);backdrop-filter:blur(3px)}
+.sheet{position:absolute;top:0;bottom:0;inset-inline-end:0;width:min(680px,100%);background:var(--light);
+  overflow-y:auto;padding:70px 48px 60px;transform:translateX(0)}
+.sheet .close{position:absolute;top:20px;inset-inline-start:24px;background:none;border:1px solid var(--line-l);
+  border-radius:999px;padding:8px 18px;font-family:var(--sans);font-size:13px;cursor:pointer;color:var(--dim-l);transition:all .2s}
+.sheet .close:hover{border-color:var(--ink);color:var(--ink)}
+.sheet .cat-tag{font-size:12.5px;font-weight:600;color:var(--blue)}
+.sheet h3{font-weight:800;font-size:clamp(24px,3vw,34px);line-height:1.4;margin:10px 0 6px;letter-spacing:-.02em}
+.sheet .sector{font-weight:300;font-size:14px;color:var(--dim-l);margin-bottom:28px}
+.sheet .part{margin-bottom:24px}
+.sheet .part b{display:block;font-size:13px;font-weight:600;color:var(--blue);margin-bottom:6px}
+.sheet .part p{font-weight:300;font-size:15.5px;color:#33383E}
+.sheet .kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:28px 0}
+.sheet .kpi{border:1px solid var(--line-l);background:#fff;padding:16px 18px}
+.sheet .kpi .v{font-weight:900;font-size:24px;letter-spacing:-.02em}
+.sheet .kpi .l{font-weight:300;font-size:12.5px;color:var(--dim-l);margin-top:2px}
+.sheet .ask{display:inline-block;margin-top:8px;background:var(--blue);color:#fff;text-decoration:none;
+  font-weight:600;font-size:14.5px;padding:13px 28px;border-radius:999px;transition:background .2s,transform .18s}
+.sheet .ask:hover{background:var(--blue-hover);transform:scale(1.03)}
+
+/* ══ services bento ══ */
+.services{padding:100px 0 60px}
+.sgrid{max-width:1280px;margin:0 auto;padding:0 4vw;display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.svc{border:1px solid var(--line-l);background:#fff;padding:34px 30px;display:flex;flex-direction:column;gap:12px;
+  transition:transform .3s var(--ease-out),box-shadow .3s;position:relative;overflow:hidden}
+.svc:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(21,24,29,.08)}
+.svc.big{grid-column:span 7}
+.svc.small{grid-column:span 5}
+.svc.tint{background:var(--ink);color:var(--light);border-color:var(--ink)}
+.svc.tint .sd{color:#AEB6C2}
+.svc.tint-blue{background:var(--blue);color:#fff;border-color:var(--blue)}
+.svc.tint-blue .sd{color:#D6DFFF}
+.svc h3{font-weight:800;font-size:clamp(20px,2.2vw,27px);letter-spacing:-.02em}
+.svc .sd{font-weight:300;font-size:15px;color:var(--dim-l);max-width:56ch}
+.svc .inc{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:16px}
+.svc .inc span{font-size:12.5px;font-weight:300;border:1px solid currentColor;opacity:.75;padding:4px 12px;border-radius:999px}
+.svc .dur{font-size:13px;font-weight:600;margin-top:14px}
+.svc.tint .dur,.svc.tint-blue .dur{color:inherit}
+.svc .dur i{font-style:normal;font-weight:300;opacity:.7}
+
+/* ══ products shelf ══ */
+.products{padding:90px 0 80px;background:var(--light2)}
+.shelf{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 4vw 26px;
+  max-width:1280px;margin:0 auto;scrollbar-width:thin}
+.prod{scroll-snap-align:start;flex:0 0 300px;background:#fff;border:1px solid var(--line-l);
+  padding:30px 26px;display:flex;flex-direction:column;gap:10px;transition:transform .3s var(--ease-out),box-shadow .3s}
+.prod:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(21,24,29,.09)}
+.prod.free{border-top:3px solid var(--blue)}
+.prod .badge{font-size:11.5px;font-weight:600;color:var(--blue)}
+.prod h3{font-weight:800;font-size:21px;letter-spacing:-.02em}
+.prod .pd{font-weight:300;font-size:13.5px;color:var(--dim-l);flex-grow:1}
+.prod ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin:8px 0 14px}
+.prod ul li{font-weight:300;font-size:13px;color:#43484E;padding-inline-start:16px;position:relative}
+.prod ul li::before{content:'';position:absolute;inset-inline-start:0;top:.62em;width:7px;height:2px;background:var(--blue)}
+.prod .price{font-weight:900;font-size:26px;letter-spacing:-.02em}
+.prod .price i{font-style:normal;font-weight:300;font-size:13px;color:var(--dim-l)}
+.prod a{display:block;text-align:center;background:var(--ink);color:#fff;text-decoration:none;font-weight:600;
+  font-size:14px;padding:12px;border-radius:999px;transition:background .2s}
+.prod a:hover{background:var(--blue)}
+.guarantee{max-width:1280px;margin:6px auto 0;padding:0 4vw;font-size:13px;font-weight:300;color:var(--dim-l)}
+
+/* ══ about / method ══ */
+.about{padding:110px 0 60px}
+.about-grid{max-width:1280px;margin:0 auto;padding:0 4vw;display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:start}
+.manifesto{font-weight:800;font-size:clamp(24px,2.9vw,38px);line-height:1.65;letter-spacing:-.02em;text-wrap:balance}
+.manifesto .accent{color:var(--blue)}
+.about-side p{font-weight:300;font-size:15.5px;color:#33383E;margin-bottom:16px}
+.principles{max-width:1280px;margin:60px auto 0;padding:0 4vw;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--ink)}
+.pr{padding:30px 26px 10px;border-inline-start:1px solid var(--line-l)}
+.pr:first-child{border-inline-start:none;padding-inline-start:0}
+.pr h4{font-weight:800;font-size:18px;margin-bottom:8px}
+.pr p{font-weight:300;font-size:14px;color:var(--dim-l)}
+
+/* ══ reviews marquee ══ */
+.reviews{padding:90px 0;background:var(--ink);color:var(--light);overflow:hidden}
+.reviews .sec-head h2{color:var(--light)}
+.reviews .sec-head p{color:#AEB6C2}
+.marquee{display:flex;gap:18px;width:max-content;animation:mq 46s linear infinite;padding:14px 0}
+.marquee:hover{animation-play-state:paused}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(50%)}}
+[dir="ltr"] .marquee{animation-name:mqltr}
+@keyframes mqltr{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.rq{flex:0 0 340px;border:1px solid rgba(255,255,255,.12);background:var(--dark2);padding:26px 26px 22px}
+.rq p{font-weight:300;font-size:15.5px;line-height:1.9;color:#E4E7EC}
+.rq .who{margin-top:16px;font-size:12.5px;color:#8C96A3}
+.rq .stars{color:var(--blue);font-size:13px;letter-spacing:2px;margin-top:4px}
+.rev-stats{max-width:1280px;margin:44px auto 0;padding:0 4vw;display:flex;gap:40px;flex-wrap:wrap}
+.rev-stats div{font-weight:300;font-size:14px;color:#AEB6C2}
+.rev-stats b{display:block;font-weight:900;font-size:26px;color:var(--light)}
+.rev-stats a{color:#AEB6C2}
+
+/* ══ contact ══ */
+.contact{padding:110px 0 90px}
+.c-grid{max-width:1280px;margin:0 auto;padding:0 4vw;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}
+.c-copy h2{font-weight:900;font-size:clamp(30px,4.4vw,56px);letter-spacing:-.02em;line-height:1.35;text-wrap:balance}
+.c-copy h2 .accent{color:var(--blue)}
+.c-copy p{font-weight:300;color:var(--dim-l);margin:18px 0 30px;max-width:44ch}
+.c-direct{display:flex;flex-direction:column;gap:10px}
+.c-direct a{color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;display:flex;gap:10px;align-items:center}
+.c-direct a:hover{color:var(--blue)}
+.c-direct .lbl{font-weight:300;color:var(--dim-l);font-size:13px}
+form .field{margin-bottom:18px}
+form label{display:block;font-size:13.5px;font-weight:600;margin-bottom:7px}
+form input,form textarea{width:100%;font-family:var(--sans);font-weight:300;font-size:15px;color:var(--ink);
+  background:#fff;border:1px solid var(--line-l);padding:14px 16px;transition:border-color .2s;border-radius:2px}
+form input:focus,form textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+form input::placeholder,form textarea::placeholder{color:#A9AEB3}
+form textarea{min-height:130px;resize:vertical}
+form .hint{font-size:12.5px;font-weight:300;color:var(--dim-l);margin-top:6px}
+form button{background:var(--blue);color:#fff;border:0;font-family:var(--sans);font-weight:600;font-size:16px;
+  padding:16px 40px;border-radius:999px;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1),background .2s;margin-top:6px}
+form button:hover{transform:scale(1.04);background:var(--blue-hover)}
+form button:active{transform:scale(.97)}
+.form-note{font-size:12.5px;font-weight:300;color:var(--dim-l);margin-top:12px}
+
+/* footer */
+footer{border-top:1px solid var(--line-l);padding:28px 4vw;display:flex;justify-content:space-between;align-items:center;
+  color:var(--dim-l);font-size:13px;font-weight:300;flex-wrap:wrap;gap:10px;background:var(--light)}
+footer .fl{display:flex;gap:20px}
+footer a{color:var(--dim-l);text-decoration:none}
+footer a:hover{color:var(--ink)}
+
+/* ══ archive page ══ */
+.arch-hero{background:var(--dark);color:var(--white);padding:150px 4vw 70px;text-align:center}
+.arch-hero h1{font-weight:900;font-size:clamp(34px,5.6vw,72px);letter-spacing:-.02em;line-height:1.3;text-wrap:balance}
+.arch-hero h1 .accent{color:var(--blue)}
+.arch-hero p{font-weight:300;color:var(--dim-d);margin-top:16px;max-width:56ch;margin-inline:auto}
+.filters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:34px 4vw 10px;max-width:1280px;margin:0 auto}
+.filters button{font-family:var(--sans);font-weight:300;font-size:13.5px;background:none;border:1px solid var(--line-l);
+  color:var(--dim-l);padding:8px 20px;border-radius:999px;cursor:pointer;transition:all .2s}
+.filters button:hover{border-color:var(--ink);color:var(--ink)}
+.filters button.on{background:var(--ink);border-color:var(--ink);color:var(--light);font-weight:600}
+.arch-list{max-width:1280px;margin:26px auto 0;padding:0 4vw 90px}
+.arow{border:1px solid var(--line-l);background:#fff;margin-bottom:12px;overflow:hidden}
+.arow.hide{display:none}
+.arow-head{display:flex;align-items:center;gap:20px;justify-content:space-between;width:100%;background:none;border:0;
+  font-family:var(--sans);color:var(--ink);padding:24px 28px;cursor:pointer;text-align:inherit;transition:background .2s}
+.arow-head:hover{background:var(--light2)}
+.arow-head .t{font-weight:800;font-size:clamp(17px,2vw,23px);letter-spacing:-.01em;line-height:1.5}
+.arow-head .side{display:flex;align-items:center;gap:18px;flex-shrink:0}
+.arow-head .cat{font-weight:300;font-size:12.5px;color:var(--dim-l)}
+.arow-head .stat{font-weight:900;font-size:19px;color:var(--blue)}
+.arow-head .chev{width:26px;height:26px;border:1px solid var(--line-l);border-radius:50%;display:grid;place-items:center;
+  font-size:13px;color:var(--dim-l);transition:transform .3s var(--ease-out),background .2s;flex-shrink:0}
+.arow.open .chev{transform:rotate(45deg);background:var(--ink);color:var(--light);border-color:var(--ink)}
+.arow-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease-out)}
+.arow.open .arow-body{grid-template-rows:1fr}
+.arow-in{overflow:hidden}
+.arow-pad{padding:4px 28px 30px;display:grid;grid-template-columns:2fr 1fr;gap:36px}
+.arow-pad .part{margin-bottom:16px}
+.arow-pad .part b{display:block;font-size:12.5px;font-weight:600;color:var(--blue);margin-bottom:4px}
+.arow-pad .part p{font-weight:300;font-size:14.5px;color:#33383E}
+.arow-pad .quote{border-inline-start:3px solid var(--blue);padding:14px 18px;background:var(--blue-soft);
+  font-weight:300;font-size:14.5px;align-self:start}
+.arow-pad .quote .who{font-size:12px;color:var(--dim-l);margin-top:8px}
+
+/* reveals */
+.rv{opacity:0;transform:translateY(26px)}
+.no-js .rv,[data-reduced] .rv{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1!important;transform:none!important}
+  .marquee{animation:none;flex-wrap:wrap;width:auto}
+  html{scroll-behavior:auto}
+}
+
+/* ══ responsive ══ */
+@media (max-width:1000px){
+  .svc.big,.svc.small{grid-column:span 12}
+  .about-grid{grid-template-columns:1fr;gap:34px}
+  .c-grid{grid-template-columns:1fr;gap:50px}
+  .principles{grid-template-columns:1fr;border-top:0}
+  .pr{border-inline-start:none;border-top:1px solid var(--line-l);padding:22px 0 8px}
+}
+@media (max-width:900px){
+  .nav .links{display:none}
+  .nav .burger{display:block}
+  .metrics{grid-template-columns:1fr 1fr;border-inline:none}
+  .m:nth-child(3){border-inline-start:none}
+  .m{border-top:1px solid var(--line-l);padding:32px 14px}
+  .m:nth-child(-n+2){border-top:none}
+  .prow{padding:24px 5vw}
+  .prow .meta{flex-direction:column;gap:2px;align-items:flex-end}
+  .sheet{padding:76px 24px 50px}
+  .sheet .kpis{grid-template-columns:1fr}
+  .arow-pad{grid-template-columns:1fr;gap:8px}
+  .arow-head{padding:18px 18px}
+  .arow-head .side .cat{display:none}
+  .rq{flex-basis:290px}
+}
+
+/* ═════════════ v2 redesign layer ═════════════ */
+:root{
+  --sans:'IBM Plex Sans Arabic','IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --amber:#C67E24; --amber-soft:#F7F0E3; --amber-line:#EADCC2;
+  --blue-tint:#EEF2FF; --blue-line:#DCE3FF;
+  --shadow-sm:0 2px 12px rgba(20,23,28,.05);
+  --shadow:0 22px 50px rgba(20,23,28,.10);
+  --dim-d:#828B98;
+}
+body{font-weight:400}
+h1,h2,h3,h4,.headline h1,.headline .h1,.m .v,.prow .t,.prow .stat,.svc h3,.sheet h3,.sheet .kpi .v,
+.c-copy h2,.manifesto,.arch-hero h1,.prod .price,.prod h3,.rev-stats b,.arow-head .t,.arow-head .stat{font-weight:700}
+
+/* nav v2 */
+.nav{mix-blend-mode:normal;padding:14px 4vw;color:#fff;transition:background .3s,color .3s,box-shadow .3s,padding .3s;border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(245,246,242,.86);backdrop-filter:blur(14px) saturate(1.2);color:var(--ink);border-bottom-color:var(--line-l);padding:9px 4vw;box-shadow:var(--shadow-sm)}
+.nav .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit}
+.nav .avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;object-position:50% 16%;border:1.5px solid rgba(255,255,255,.7);background:#dfe0da;flex-shrink:0;transition:border-color .3s}
+.nav.scrolled .avatar{border-color:var(--line-l)}
+.nav .name{font-weight:700;font-size:16px;color:inherit;line-height:1.15;text-decoration:none}
+.nav .name small{display:block;font-weight:400;font-size:10.5px;opacity:.68}
+.nav .links a{color:inherit;font-weight:400}
+.nav .lang{border:1px solid currentColor;color:inherit;opacity:.78}
+.nav .lang:hover{opacity:1;background:transparent}
+.nav .burger{color:inherit;font-size:22px}
+
+/* metrics v2 — floating card */
+.metrics-wrap{padding:76px 4vw 8px}
+.metrics{grid-template-columns:repeat(4,1fr);max-width:1180px;background:#fff;border:1px solid var(--line-l);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.m{padding:38px 24px}
+.m .v i{font-size:.55em;vertical-align:.18em}
+.m .mico{width:44px;height:44px;margin:0 auto 16px;display:grid;place-items:center;border-radius:13px;background:var(--blue-soft);color:var(--blue)}
+.m .mico svg{width:24px;height:24px}
+/* hero sub: reset the headline's tight tracking so it matches body type */
+.headline .sub{letter-spacing:normal;font-weight:400;max-width:58ch;margin-inline:auto;line-height:1.75}
+
+/* ═══ final polish layer ═══ */
+section[id],#archive{scroll-margin-top:74px}
+form input,form textarea{border-radius:10px}
+.rq{border-radius:14px}
+.sheet .kpi{border-radius:12px}
+.arow{border-radius:14px}
+.arow.open{box-shadow:var(--shadow-sm)}
+.arow.open .arow-head{background:var(--light2)}
+.arow-pad .quote{border-radius:8px}
+.sheet{box-shadow:0 0 70px rgba(13,16,21,.28)}
+.sheet .close{background:var(--light);z-index:2}
+.prod[role="button"]:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.cta-band .btn:active{transform:scale(.97)}
+.prod a:active,.sheet .ask:active{transform:scale(.97)}
+.archive-link a:active{transform:scale(.97)}
+
+/* image lightbox */
+.sheet .cg-main{cursor:zoom-in}
+.lightbox{position:fixed;inset:0;z-index:220;background:rgba(10,12,16,.93);display:none;place-items:center;padding:3vh 3vw;cursor:zoom-out}
+.lightbox.open{display:grid}
+.lightbox img{max-width:95vw;max-height:90vh;width:auto;height:auto;border-radius:10px;box-shadow:0 24px 90px rgba(0,0,0,.55);cursor:default}
+.lightbox .lb-close{position:absolute;top:16px;inset-inline-start:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.32);color:#fff;border-radius:999px;width:40px;height:40px;font-size:16px;cursor:pointer;font-family:var(--sans);transition:background .2s}
+.lightbox .lb-close:hover{background:rgba(255,255,255,.24)}
+.lightbox .lb-hint{position:absolute;bottom:16px;inset-inline:0;text-align:center;color:rgba(255,255,255,.55);font-size:12.5px;font-weight:300;pointer-events:none}
+
+/* section headers centered + eyebrow */
+.sec-head{max-width:720px;margin:0 auto 46px;text-align:center}
+.sec-head .eyebrow{display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:13px;color:var(--blue);margin-bottom:16px}
+.sec-head .eyebrow::before,.sec-head .eyebrow::after{content:'';width:22px;height:1px;background:currentColor;opacity:.5}
+.sec-head h2{line-height:1.3}
+.sec-head p{margin-inline:auto;max-width:52ch}
+.reviews .sec-head .eyebrow{color:#8FA8FF}
+.rev-stats{justify-content:center;text-align:center;gap:48px}
+.rev-stats div{display:flex;flex-direction:column;align-items:center}
+
+/* work list on white ground + thumbs */
+.list-wrap{padding:104px 0 64px;background:#fff;border-block:1px solid var(--line-l)}
+.plist{max-width:1180px;margin:0 auto;border-top:1px solid var(--line-l)}
+.prow{padding:26px max(4vw,24px)}
+.prow .head{display:flex;align-items:center;gap:22px;min-width:0}
+.prow .thumb{width:104px;height:66px;border-radius:10px;object-fit:cover;flex-shrink:0;border:1px solid var(--line-l);background:var(--light2)}
+.archive-link a{border-color:var(--ink)}
+
+/* services v2 — tinted band + icons */
+.services{padding:106px 0 78px;background:var(--blue-tint);border-block:1px solid var(--blue-line)}
+.sgrid{gap:16px}
+.svc{border-radius:16px;box-shadow:var(--shadow-sm);border-color:#E4E7EC}
+.svc:hover{box-shadow:var(--shadow)}
+.svc .ico{width:50px;height:50px;display:grid;place-items:center;border-radius:14px;background:var(--blue-soft);color:var(--blue);margin-bottom:6px}
+.svc .ico svg{width:27px;height:27px}
+.svc.tint{background:var(--ink);border-color:var(--ink)}
+.svc.tint .ico{background:rgba(255,255,255,.09);color:#fff}
+.svc.amber{background:linear-gradient(150deg,#C67E24,#A9641A);color:#fff;border-color:transparent}
+.svc.amber .sd{color:#F6E7D2}
+.svc.amber .ico{background:rgba(255,255,255,.16);color:#fff}
+.svc.amber .inc span{border-color:rgba(255,255,255,.42)}
+.svc.amber .dur{color:#fff}
+
+/* products v2 — warm band + amber + shots */
+.products{padding:106px 0 88px;background:var(--amber-soft);border-block:1px solid var(--amber-line)}
+.prod{border-radius:16px;box-shadow:var(--shadow-sm);border-color:var(--amber-line)}
+.prod:hover{box-shadow:var(--shadow)}
+.prod.free{border-top:3px solid var(--amber)}
+.prod .badge{color:var(--amber)}
+.prod ul li::before{background:var(--amber)}
+.prod a{background:var(--ink)}
+.prod a:hover{background:var(--amber)}
+.prod .shot{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px;border:1px solid var(--amber-line);background:#fff;margin-bottom:2px}
+.guarantee a{color:var(--amber)!important}
+
+/* about v2 — portrait */
+.about{padding:112px 0 44px;background:var(--light)}
+.about-grid{grid-template-columns:.95fr 1.05fr;gap:56px;align-items:center}
+.about-portrait{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line-l);box-shadow:var(--shadow);aspect-ratio:4/5;background:var(--light2)}
+.about-portrait img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;display:block}
+.about-portrait .tagpill{position:absolute;inset-inline-start:16px;bottom:16px;background:rgba(11,14,19,.74);backdrop-filter:blur(6px);color:#fff;font-size:12.5px;font-weight:500;padding:8px 15px;border-radius:999px}
+.principles{margin-top:60px}
+.pr .pico{width:34px;height:34px;color:var(--blue);margin-bottom:12px}
+
+/* cta band */
+.cta-band{background:var(--ink);color:var(--light);text-align:center;padding:86px 4vw}
+.cta-band .in{max-width:760px;margin:0 auto}
+.cta-band h2{font-weight:700;font-size:clamp(26px,3.4vw,42px);letter-spacing:-.02em;line-height:1.4;text-wrap:balance;color:var(--white)}
+.cta-band h2 .accent{color:#7B9BFF}
+.cta-band p{font-weight:300;color:var(--dim-d);margin:14px auto 26px;max-width:50ch}
+.cta-band .btn{display:inline-flex;align-items:center;gap:9px;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;font-size:15.5px;padding:15px 34px;border-radius:999px;transition:transform .18s,background .2s}
+.cta-band .btn:hover{transform:translateY(-2px);background:var(--blue-hover)}
+
+/* contact + direct icons */
+.contact{background:var(--light)}
+.c-direct a svg{width:18px;height:18px;flex-shrink:0}
+
+/* responsive v2 */
+@media (max-width:1000px){
+  .about-grid{grid-template-columns:1fr;gap:34px}
+  .about-portrait{max-width:400px;margin-inline:auto;aspect-ratio:1/1}
+}
+@media (max-width:900px){
+  .nav .name small{display:none}
+  .metrics{grid-template-columns:1fr 1fr;border-radius:16px}
+  .m{padding:30px 14px}
+  .prow .thumb{width:74px;height:52px}
+  .prow .head{gap:14px}
+}
+@media (max-width:560px){ .prow .thumb{display:none} }
+
+/* ═══════ v3: galleries + product detail + archive thumbs ═══════ */
+.cgallery{margin:0 0 24px}
+.cg-main{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;border:1px solid var(--line-l);background:var(--light2);box-shadow:var(--shadow-sm);display:block}
+.cg-thumbs{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
+.cg-th{padding:0;border:1px solid var(--line-l);border-radius:8px;overflow:hidden;cursor:pointer;background:none;width:74px;height:50px;transition:border-color .2s,transform .2s}
+.cg-th img{width:100%;height:100%;object-fit:cover;display:block}
+.cg-th:hover{transform:translateY(-2px)}
+.cg-th.on{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue-soft)}
+
+/* clickable product cards */
+.prod{cursor:pointer}
+.prod .more{margin-top:6px;font-size:12.5px;font-weight:600;color:var(--amber);display:inline-flex;align-items:center;gap:6px}
+.prod .more svg{width:14px;height:14px}
+
+/* product detail sheet */
+.sheet .pd-badge{font-size:12.5px;font-weight:600;color:var(--amber)}
+.sheet .pd-price{font-weight:700;font-size:30px;letter-spacing:-.02em;margin:14px 0 2px}
+.sheet .pd-price i{font-style:normal;font-weight:400;font-size:14px;color:var(--dim-l)}
+.sheet .feat{list-style:none;display:flex;flex-direction:column;gap:10px;margin:18px 0 24px}
+.sheet .feat li{position:relative;padding-inline-start:28px;font-weight:300;font-size:15px;color:#33383E;line-height:1.7}
+.sheet .feat li svg{position:absolute;inset-inline-start:0;top:3px;width:19px;height:19px;color:var(--amber)}
+.sheet .ask.amber{background:var(--amber)}
+.sheet .ask.amber:hover{background:#A9641A}
+.sheet .pd-note{font-size:13px;font-weight:300;color:var(--dim-l);margin-top:14px}
+
+/* archive thumbnails */
+.arow-head{gap:16px}
+.arow-main{display:flex;align-items:center;gap:16px;min-width:0;flex:1}
+.arow-thumb{width:92px;height:60px;border-radius:8px;flex-shrink:0;border:1px solid var(--line-l);background:var(--light2) center/cover no-repeat}
+@media (max-width:900px){ .arow-thumb{width:66px;height:46px} }
+@media (max-width:560px){ .arow-thumb{display:none} }
+
+
+/* ═══ v9: work cards grid + gallery arrows + archive detail ═══ */
+.wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:1180px;margin:0 auto;padding:0 4vw}
+.wcard{background:#fff;border:1px solid var(--line-l);border-radius:16px;overflow:hidden;cursor:pointer;
+  text-align:inherit;padding:0;font-family:inherit;color:inherit;display:flex;flex-direction:column;
+  box-shadow:var(--shadow-sm);transition:transform .32s var(--ease-out),box-shadow .32s}
+.wcard:hover,.wcard:focus-visible{transform:translateY(-6px);box-shadow:var(--shadow)}
+.wcard:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.wcard .cover{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--light2)}
+.wcard .cover img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform .55s var(--ease-out)}
+.wcard:hover .cover img{transform:scale(1.045)}
+.wcard .kind{position:absolute;top:12px;inset-inline-start:12px;background:rgba(13,16,21,.8);color:#fff;
+  font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:999px;backdrop-filter:blur(5px)}
+.wcard .shots{position:absolute;bottom:12px;inset-inline-end:12px;background:rgba(13,16,21,.72);color:#fff;
+  font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;display:flex;align-items:center;gap:5px;backdrop-filter:blur(5px)}
+.wcard .shots svg{width:13px;height:13px}
+.wcard .body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;flex:1}
+.wcard h3{font-weight:700;font-size:19px;line-height:1.5;letter-spacing:-.01em}
+.wcard .desc{font-weight:300;font-size:14px;color:var(--dim-l);line-height:1.75;flex:1}
+.wcard .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:13px;border-top:1px solid var(--line-l)}
+.wcard .stat{font-weight:700;font-size:17px;color:var(--blue);letter-spacing:-.01em}
+.wcard .stat small{font-weight:400;font-size:12px;color:var(--dim-l);margin-inline-start:5px}
+.wcard .open{font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
+.wcard .open svg{width:14px;height:14px;transition:transform .25s}
+.wcard:hover .open svg{transform:translateX(var(--ax,-3px))}
+[dir="ltr"] .wcard{--ax:3px}
+@media (max-width:1000px){ .wgrid{grid-template-columns:repeat(2,1fr);gap:18px} }
+@media (max-width:640px){ .wgrid{grid-template-columns:1fr} }
+
+/* gallery arrows */
+.cg-stage{position:relative}
+.cg-nav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.94);border:1px solid var(--line-l);display:grid;place-items:center;cursor:pointer;
+  box-shadow:var(--shadow-sm);transition:background .2s,transform .2s;z-index:2;color:var(--ink);padding:0}
+.cg-nav svg{width:18px;height:18px}
+.cg-nav:hover{background:#fff;transform:translateY(-50%) scale(1.09)}
+.cg-prev{inset-inline-start:10px}
+.cg-next{inset-inline-end:10px}
+.cg-count{position:absolute;bottom:10px;inset-inline-end:10px;background:rgba(13,16,21,.72);color:#fff;
+  font-size:12px;font-weight:500;padding:4px 11px;border-radius:999px;backdrop-filter:blur(4px)}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;display:grid;place-items:center;
+  cursor:pointer;transition:background .2s;z-index:3}
+.lb-nav:hover{background:rgba(255,255,255,.26)}
+.lb-nav svg{width:20px;height:20px}
+.lb-prev{inset-inline-start:18px}
+.lb-next{inset-inline-end:18px}
+
+/* archive rows open the detail sheet */
+.arow-body{display:none}
+.arow-head{cursor:pointer}
+.arow-head .chev{font-size:0}
+.arow-head .chev::after{content:'';width:7px;height:7px;border-inline-start:1.7px solid currentColor;border-block-start:1.7px solid currentColor;transform:rotate(-45deg);margin-inline-start:3px}
+[dir="ltr"] .arow-head .chev::after{transform:rotate(135deg);margin-inline-start:-3px}
+.arow:hover .chev{background:var(--ink);color:var(--light);border-color:var(--ink)}
+
+/* single-file wrapper */
+.page-rtl{direction:rtl}
+[data-noop]{display:none}
+</style>
+<div class="page-rtl" dir="rtl" lang="ar">
+<nav class="nav">
+  <a class="brand" href="index.html">
+    <img class="avatar" src="__AVATAR__" alt="نواف الشريف" width="38" height="38">
+    <span class="name">نواف الشريف<small>انظمة بيانات واتمتة اعمال</small></span>
+  </a>
+  <div class="links">
+    <a href="#work">الاعمال</a>
+    <a href="#archive">الارشيف</a>
+    <a href="#services">الخدمات</a>
+    <a href="#products">الانظمة الجاهزة</a>
+    <a href="#about">عني</a>
+    <a href="#contact">تواصل</a>
+    <a class="lang" href="https://claude.ai/code/artifact/30946092-ea26-49a1-8604-75b38b28c00d" target="_blank" rel="noopener">EN</a>
+  </div>
+  <button class="burger" type="button" aria-label="القائمة">☰</button>
+</nav>
+<div class="mmenu" role="dialog" aria-label="القائمة">
+  <button class="close" type="button">اغلاق ✕</button>
+  <a href="#work">الاعمال</a>
+  <a href="#archive">الارشيف الكامل</a>
+  <a href="#services">الخدمات</a>
+  <a href="#products">الانظمة الجاهزة</a>
+  <a href="#about">عني</a>
+  <a href="#contact">تواصل</a>
+  <a href="https://claude.ai/code/artifact/30946092-ea26-49a1-8604-75b38b28c00d" target="_blank" rel="noopener">English</a>
+</div>
+
+<!-- مشهد التحول -->
+<section id="scene" aria-label="مقدمة">
+  <canvas id="cv" aria-hidden="true"></canvas>
+  <div class="headline hl-a" id="hlA">
+    <h1>كل شيء عندك مسجل.<br>ولا شيء واضح.
+      <span class="sub">مبيعات في ملف ومصاريف في ملف ثاني ومخزون في ثالث. والقرار المهم معلق ينتظر.</span>
+    </h1>
+  </div>
+  <div class="headline hl-b" id="hlB">
+    <div class="h1">هنا يبدأ <span class="accent">النظام.</span>
+      <span class="sub">انا نواف الشريف. محلل بيانات ومصمم انظمة اعمال. اجمع ارقامك في نظام واحد يظهر لك الصورة كاملة ويحسم قرارك.</span>
+    </div>
+  </div>
+</section>
+
+<div class="light-world">
+
+  <!-- المؤشرات -->
+  <div class="metrics-wrap">
+    <div class="metrics">
+      <div class="m rv"><div class="mico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg></div><div class="v num">63,933</div><div class="l">عملية بيع جمعتها في داشبورد واحد</div></div>
+      <div class="m rv"><div class="mico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.7 5.8 6.3.6-4.8 4.2 1.5 6.2L12 16.9 6.3 20l1.5-6.2L3 9.6l6.3-.6z"/></svg></div><div class="v num">36<i>+</i></div><div class="l">تقييم موثق 5/5 عبر 3 منصات</div></div>
+      <div class="m rv"><div class="mico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="m9 13.5-1 7.5 4-2 4 2-1-7.5"/><path d="m9.5 9 1.7 1.7L15 7.5"/></svg></div><div class="v num">22<i>+</i></div><div class="l">نظام منفذ لعملاء حقيقيين</div></div>
+      <div class="m rv"><div class="mico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div><div class="v num">6</div><div class="l">قطاعات من المطاعم الى المقاولات</div></div>
+    </div>
+    <p class="guarantee rv" style="text-align:center;margin-top:14px">ارقام من مشاريع حقيقية موثقة في <a href="https://mostaql.com/u/EngNawaf" target="_blank" rel="noopener" style="color:inherit">مستقل</a> وخمسات ومنصات العمل الحر</p>
+  </div>
+
+  <!-- المشاريع المختارة -->
+  <section class="list-wrap" id="work">
+    <div class="sec-head rv">
+      <span class="eyebrow">اعمال مختارة</span>
+      <h2>انظمة غيرت طريقة اتخاذ القرار</h2>
+      <p>كل سطر مشروع حقيقي برقم حقيقي. اضغط على اي مشروع لتقرأ القصة كاملة.</p>
+    </div>
+    <div class="wgrid">
+      <button class="wcard rv" type="button" data-open-case="p7">
+        <span class="cover"><img src="__WORK_P7__" alt="نظام ادارة صيانة المصاعد"><span class="kind">نظام ويب</span><span class="shots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.2"/></svg><span class="num">6</span></span></span>
+        <span class="body">
+          <h3>نظام ادارة صيانة المصاعد</h3>
+          <span class="desc">واجهتان في منظومة واحدة: ادارة على الحاسب وميدان على الجوال، والعقد يولّد مهام الصيانة تلقائيًا ويوقفها عند انتهائه.</span>
+          <span class="foot"><span class="stat num">35<small>بند فحص</small></span><span class="open">التفاصيل والصور <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span></span>
+        </span>
+      </button>
+      <button class="wcard rv" type="button" data-open-case="p1">
+        <span class="cover"><img src="__WORK_P1__" alt="داشبورد المبيعات والمخزون لمصنع منظفات"><span class="kind">داشبورد</span><span class="shots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.2"/></svg><span class="num">2</span></span></span>
+        <span class="body">
+          <h3>داشبورد المبيعات والمخزون لمصنع منظفات</h3>
+          <span class="desc">6 فروع في شاشة قرار واحدة على Power BI بعد ان كانت موزعة على 9 ملفات منفصلة.</span>
+          <span class="foot"><span class="stat num">63,933<small>عملية بيع</small></span><span class="open">التفاصيل والصور <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span></span>
+        </span>
+      </button>
+      <button class="wcard rv" type="button" data-open-case="p2">
+        <span class="cover"><img src="__WORK_P2__" alt="نظام متابعة الاقامات والجوازات"><span class="kind">نظام انذار مبكر</span><span class="shots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.2"/></svg><span class="num">1</span></span></span>
+        <span class="body">
+          <h3>نظام متابعة الاقامات والجوازات</h3>
+          <span class="desc">داشبورد استباقي يصنف الاقامات حسب قرب انتهائها ويكشف المنتهية قبل ان تتحول الى غرامات.</span>
+          <span class="foot"><span class="stat num">109<small>اقامة منتهية</small></span><span class="open">التفاصيل والصور <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span></span>
+        </span>
+      </button>
+      <button class="wcard rv" type="button" data-open-case="p3">
+        <span class="cover"><img src="__WORK_P3__" alt="نظام تشغيل مطعم متكامل"><span class="kind">نظام تشغيل</span><span class="shots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.2"/></svg><span class="num">2</span></span></span>
+        <span class="body">
+          <h3>نظام تشغيل مطعم متكامل</h3>
+          <span class="desc">8 اقسام مترابطة تغطي المالية والعمليات والرواتب ومنصات التوصيل، مع خطة نمو 60 يوم.</span>
+          <span class="foot"><span class="stat num">30+<small>ملف تشغيلي</small></span><span class="open">التفاصيل والصور <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span></span>
+        </span>
+      </button>
+      <button class="wcard rv" type="button" data-open-case="p4">
+        <span class="cover"><img src="__WORK_P4__" alt="دراسة جدوى شقق فندقية في الخبر"><span class="kind">دراسة جدوى</span><span class="shots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.2"/></svg><span class="num">3</span></span></span>
+        <span class="body">
+          <h3>دراسة جدوى شقق فندقية في الخبر</h3>
+          <span class="desc">مقارنة مالية كاملة بين تصميمين بايراداتهما وفترة الاسترداد، وتوصية صريحة بالاعلى عائدًا.</span>
+          <span class="foot"><span class="stat num">83%<small>زيادة الوحدات</small></span><span class="open">التفاصيل والصور <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span></span>
+        </span>
+      </button>
+      <button class="wcard rv" type="button" data-open-case="p5">
+        <span class="cover"><img src="__WORK_P5__" alt="تقرير قرار: هل نتوسع اقليميًا الان؟"><span class="kind">تقرير تنفيذي</span><span class="shots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.2"/></svg><span class="num">1</span></span></span>
+        <span class="body">
+          <h3>تقرير قرار: هل نتوسع اقليميًا الان؟</h3>
+          <span class="desc">قراءة مؤشرات النمو وتركز الايراد وتكلفة اكتساب العميل، تنتهي بتوصية نهائية مكتوبة.</span>
+          <span class="foot"><span class="stat num">91%<small>من الايراد محلي</small></span><span class="open">التفاصيل والصور <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span></span>
+        </span>
+      </button>
+      <button class="wcard rv" type="button" data-open-case="p6">
+        <span class="cover"><img src="__WORK_P6__" alt="نظام محاسبي كامل على اكسل"><span class="kind">نظام محاسبي</span><span class="shots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.2"/></svg><span class="num">2</span></span></span>
+        <span class="body">
+          <h3>نظام محاسبي كامل على اكسل</h3>
+          <span class="desc">22 ورقة مترابطة تغطي الدورة من القيد الاول الى القوائم المالية بدون اي اشتراكات.</span>
+          <span class="foot"><span class="stat num">22<small>ورقة مترابطة</small></span><span class="open">التفاصيل والصور <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span></span>
+        </span>
+      </button>
+    </div>
+    <div class="archive-link rv"><a href="#archive">تصفح الارشيف الكامل: 22 مشروع</a></div>
+  </section>
+
+  <!-- الخدمات -->
+  <section class="services" id="services">
+    <div class="sec-head rv">
+      <span class="eyebrow">الخدمات</span>
+      <h2>ماذا اقدم</h2>
+      <p>اربع خدمات هدفها واحد: قرار اوضح وعمل اخف.</p>
+    </div>
+    <div class="sgrid">
+      <article class="svc big tint rv">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg></div>
+        <h3>انظمة التشغيل المخصصة</h3>
+        <p class="sd">نظام كامل يدير دورة عملك اليومية من الطلب الى التقرير: الطلبات والمخزون والعملاء والمحاسبة والرواتب وتقييم الاداء. يبنى على المنصة التي تناسب حجمك.</p>
+        <div class="inc"><span>اكسل بدون اشتراكات</span><span>قوقل شيتس لفريق متصل</span><span>نظام ويب خاص للتوسع</span></div>
+        <p class="dur">المدة <i>حسب المنصة والنطاق باتفاق مسبق</i></p>
+      </article>
+      <article class="svc small rv">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20a8 8 0 1 1 16 0"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="m13.5 12.5 4-4"/></svg></div>
+        <h3>الداشبوردات وتحليل البيانات</h3>
+        <p class="sd">داشبورد تفاعلي على اكسل او Power BI يجمع ارقامك المبعثرة في شاشة واحدة: المبيعات والمخزون واداء الفروع.</p>
+        <div class="inc"><span>تنظيف البيانات قبل العرض</span><span>مؤشرات على مقاس اسئلتك</span><span>تحديث سهل</span></div>
+        <p class="dur">المدة <i>من 3 الى 7 ايام</i></p>
+      </article>
+      <article class="svc small amber rv">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+        <h3>اتمتة الاعمال</h3>
+        <p class="sd">المهام التي تكررها يدويًا كل اسبوع تتحول الى مسار يعمل وحده: تقارير دورية ومتابعات وتصنيف ورسائل.</p>
+        <div class="inc"><span>نبدأ بمهمة واحدة صغيرة</span><span>ثم نتوسع بما يثبت نفعه</span></div>
+        <p class="dur">المدة <i>حسب النطاق</i></p>
+      </article>
+      <article class="svc big rv">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 5-5 4 4 8-8"/><path d="M17 7h4v4"/><path d="M3 21h18"/></svg></div>
+        <h3>النماذج المالية ودراسات الجدوى</h3>
+        <p class="sd">دراسة او نموذج مالي بارقام واقعية: التكاليف والايرادات المتوقعة ونقطة التعادل وعائد الاستثمار. وتنتهي دائمًا بتوصية صريحة لان العميل لا يدفع مقابل جداول بل مقابل قرار.</p>
+        <div class="inc"><span>سيناريوهات متعددة</span><span>نقطة التعادل</span><span>توصية مكتوبة صريحة</span></div>
+        <p class="dur">المدة <i>من 7 الى 14 يوم</i></p>
+      </article>
+    </div>
+  </section>
+
+  <!-- الانظمة الجاهزة -->
+  <section class="products" id="products">
+    <div class="sec-head rv">
+      <span class="eyebrow">الانظمة الجاهزة</span>
+      <h2>انظمة جاهزة تستلمها اليوم</h2>
+      <p>نفس جودة انظمة عملائي في ملفات جاهزة بسعر ثابت. تدفع مرة واحدة وتستلم فورًا مع ضمان استرجاع 14 يوم.</p>
+    </div>
+    <div class="shelf">
+      <article class="prod free rv">
+        <img class="shot" src="__SHOT_FREE__" alt="حاسبة التسعير والربح">
+        <span class="badge">مجاني</span>
+        <h3>حاسبة التسعير والربح</h3>
+        <p class="pd">ملف اكسل للمشاريع الصغيرة يظهر لك هامش ربحك الحقيقي قبل ان تحدد اسعارك.</p>
+        <ul>
+          <li>حساب السعر تلقائيًا من هامش الربح المستهدف</li>
+          <li>نقطة التعادل لكل منتج</li>
+          <li>تقييم اسعارك الحالية بالالوان</li>
+          <li>حتى 25 منتج</li>
+        </ul>
+        <div class="price">0 <i>بدون بطاقة</i></div>
+        <a href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%A7%D8%A8%D8%BA%D9%89%20%D8%A7%D9%84%D8%AD%D8%A7%D8%B3%D8%A8%D8%A9%20%D8%A7%D9%84%D9%85%D8%AC%D8%A7%D9%86%D9%8A%D8%A9" target="_blank" rel="noopener">ارسلها لي</a>
+      </article>
+      <article class="prod rv">
+        <img class="shot" src="__SHOT_STORE__" alt="نظام ادارة المتجر">
+        <span class="badge">الاشمل</span>
+        <h3>نظام ادارة المتجر</h3>
+        <p class="pd">دورة متجرك كاملة في ملف واحد: من تسجيل الطلب الى ملخص الضريبة.</p>
+        <ul>
+          <li>حتى 2,000 طلب و300 منتج</li>
+          <li>قاعدة عملاء بتصنيف تلقائي</li>
+          <li>داشبورد بـ12 مؤشر</li>
+          <li>ملخص ضريبة القيمة المضافة ربع السنوي</li>
+        </ul>
+        <div class="price num">349 <i>ريال · دفعة واحدة</i></div>
+        <a href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%A7%D8%A8%D8%BA%D9%89%20%D8%A7%D8%B7%D9%84%D8%A8%20%D9%86%D8%B8%D8%A7%D9%85%20%D8%A7%D8%AF%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D9%85%D8%AA%D8%AC%D8%B1" target="_blank" rel="noopener">اطلبه الان</a>
+      </article>
+      <article class="prod rv">
+        <img class="shot" src="__SHOT_RIBHI__" alt="نظام ربحي">
+        <span class="badge">للتسعير</span>
+        <h3>ربحي</h3>
+        <p class="pd">تدخل التكلفة فيظهر لك السعر المناسب فورًا مع سجل كامل لارباحك.</p>
+        <ul>
+          <li>حاسبة تسعير فورية</li>
+          <li>حتى 1,000 منتج و5,000 طلب</li>
+          <li>تكاليف شهرية ثابتة حتى 500 بند</li>
+          <li>داشبورد بتوصيات</li>
+        </ul>
+        <div class="price num">289 <i>ريال · دفعة واحدة</i></div>
+        <a href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%A7%D8%A8%D8%BA%D9%89%20%D8%A7%D8%B7%D9%84%D8%A8%20%D9%86%D8%B8%D8%A7%D9%85%20%D8%B1%D8%A8%D8%AD%D9%8A" target="_blank" rel="noopener">اطلبه الان</a>
+      </article>
+      <article class="prod rv">
+        <img class="shot" src="__SHOT_MOSADED__" alt="نظام مسدد">
+        <span class="badge">للالتزامات</span>
+        <h3>مسدد</h3>
+        <p class="pd">كل اقساطك والتزاماتك المالية في مكان واحد يظهر لك المدفوع والمتبقي.</p>
+        <ul>
+          <li>حتى 1,000 التزام و3,000 دفعة</li>
+          <li>داشبورد بالاجمالي والمتبقي</li>
+          <li>تحليل شهري وصفحة ملخص</li>
+          <li>دليل استخدام مفصل</li>
+        </ul>
+        <div class="price num">179 <i>ريال · دفعة واحدة</i></div>
+        <a href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%A7%D8%A8%D8%BA%D9%89%20%D8%A7%D8%B7%D9%84%D8%A8%20%D9%86%D8%B8%D8%A7%D9%85%20%D9%85%D8%B3%D8%AF%D8%AF" target="_blank" rel="noopener">اطلبه الان</a>
+      </article>
+      <article class="prod rv">
+        <img class="shot" src="__SHOT_INCOME__" alt="ادارة الدخل والمصروفات">
+        <span class="badge">بلغتين</span>
+        <h3>ادارة الدخل والمصروفات</h3>
+        <p class="pd">قالب بسيط يضبط دخلك ومصاريفك الشهرية بالعربية والانجليزية معًا.</p>
+        <ul>
+          <li>سجل شهري حتى 2,000 عملية</li>
+          <li>داشبورد برسوم توضح مصاريفك</li>
+          <li>تصنيفات قابلة للتخصيص</li>
+          <li>نسختان بلغتين بشراء واحد</li>
+        </ul>
+        <div class="price num">99 <i>ريال · دفعة واحدة</i></div>
+        <a href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%A7%D8%A8%D8%BA%D9%89%20%D8%A7%D8%B7%D9%84%D8%A8%20%D9%82%D8%A7%D9%84%D8%A8%20%D8%A7%D9%84%D8%AF%D8%AE%D9%84%20%D9%88%D8%A7%D9%84%D9%85%D8%B5%D8%B1%D9%88%D9%81%D8%A7%D8%AA" target="_blank" rel="noopener">اطلبه الان</a>
+      </article>
+    </div>
+    <p class="guarantee">كل الانظمة تسلم فورًا بعد الشراء. اذا احتجت نظام على مقاسك بالضبط فهذا تخصصي الاساسي: <a href="#contact" style="color:var(--blue)">اطلب نظام مخصص</a></p>
+  </section>
+
+  <!-- عني -->
+  <section class="about" id="about">
+    <div class="about-grid">
+      <div class="about-portrait rv">
+        <img src="__PORTRAIT__" alt="نواف الشريف">
+        <span class="tagpill">نواف الشريف · محلل بيانات ومصمم انظمة</span>
+      </div>
+      <div class="about-text">
+      <p class="manifesto rv">المشكلة نادرًا ما تكون في الارقام نفسها. المشكلة في غياب <span class="accent">النظام</span> الذي يحولها الى قرارات.</p>
+      <div class="about-side rv">
+        <p>بدأت من 2020 وانا اعمل على سؤال واحد يتكرر عند كل صاحب منشأة: ارقامي موجودة فلماذا لا استطيع ان اقرر؟</p>
+        <p>عملت داخل المنشآت قبل ان اعمل معها: اسست ادارات من الصفر وصممت انظمة تشغيل كاملة لمطاعم وشركات خدمات وقدت مشاريع تشخيص تشغيلي تكتشف مكان الاختناق قبل معالجته.</p>
+        <p>اليوم اعمل مستقلًا مع اصحاب المنشآت الصغيرة والمتوسطة في السعودية والخليج: مطاعم ومقاولات وتجزئة وعقار وقطاع صحي وخدمة عملاء.</p>
+      </div>
+      </div>
+    </div>
+    <div class="principles">
+      <div class="pr rv">
+        <div class="pico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <h4>التشخيص قبل التنفيذ</h4>
+        <p>افهم المشكلة الحقيقية اولًا. كثير من الطلبات يتضح ان لها حل ابسط وارخص من المطلوب، واقولها لك بصراحة.</p>
+      </div>
+      <div class="pr rv">
+        <div class="pico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg></div>
+        <h4>اتفاق بلا مفاجآت</h4>
+        <p>نطاق محدد وسعر ثابت ومدة معلنة قبل البداية. لا مشاريع مفتوحة ولا تكاليف تظهر في المنتصف.</p>
+      </div>
+      <div class="pr rv">
+        <div class="pico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8v8l9 5 9-5V8z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h4>تسليم يستخدم فعلًا</h4>
+        <p>النظام يسلم جاهزًا للعمل مع شرح استخدامه لان النظام الذي لا يستخدم مجرد ملف اخر يضاف الى التبعثر.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- التقييمات -->
+  <section class="reviews">
+    <div class="sec-head rv">
+      <span class="eyebrow">شهادات موثقة</span>
+      <h2>كلام العملاء الموثق</h2>
+      <p>36 تقييم بدرجة 5/5 عبر ثلاث منصات عمل حر. هذه عينة منها بنصها.</p>
+    </div>
+    <div class="marquee" aria-label="اقتباسات من تقييمات العملاء">
+      <div class="rq"><p>«بدون مبالغة هذا الشخص افضل من تعاملت معهم عن بعد. جزاه الله خير»</p><div class="who">عميل نظام حضور وانصراف · مستقل</div><div class="stars">★★★★★</div></div>
+      <div class="rq"><p>«مبدع حرفيًا، انصح الجميع بالتعامل مع نواف»</p><div class="who">عميل داشبورد ذاتي التحديث · مستقل</div><div class="stars">★★★★★</div></div>
+      <div class="rq"><p>«شخص محترف ومتعاون جدًا، سلم الشغل بجودة ممتازة»</p><div class="who">عميل موثق · خمسات</div><div class="stars">★★★★★</div></div>
+      <div class="rq"><p>«افضل من اخرج لي البيانات، بشكل سريع ومتجاوب جدًا»</p><div class="who">عميل استخراج بيانات مالية · مستقل</div><div class="stars">★★★★★</div></div>
+      <div class="rq"><p>«محترف في الاعمال وسريع في الانجاز»</p><div class="who">عميل استراتيجية مبيعات · تواصل مباشر</div><div class="stars">★★★★★</div></div>
+      <div class="rq"><p>«رائع بالتعامل وبالعمل»</p><div class="who">عميل حاسبة تكاليف مشاريع · خمسات</div><div class="stars">★★★★★</div></div>
+      <div class="rq"><p>«يعطيك العافية على العمل الذي قدمته»</p><div class="who">عميل نظام محاسبة زراعية · مستقل</div><div class="stars">★★★★★</div></div>
+    </div>
+    <div class="rev-stats">
+      <div class="rv"><b class="num">12</b>تقييم في <a href="https://mostaql.com/u/EngNawaf" target="_blank" rel="noopener">مستقل</a></div>
+      <div class="rv"><b class="num">17</b>تقييم عبر تعاملات مباشرة موثقة من 6 سنوات</div>
+      <div class="rv"><b class="num">7</b>تقييمات في خمسات بنسبة اكتمال 93%</div>
+    </div>
+  </section>
+
+  <!-- شريط الدعوة -->
+  <div class="cta-band">
+    <div class="in">
+      <h2>اجعل ارقامك تعمل لك <span class="accent">لا ضدك.</span></h2>
+      <p>ابدأ برسالة واحدة تشرح وضعك. اول قراءة للحالة بدون مقابل وبرأي صريح.</p>
+      <a class="btn" href="#contact">ابدأ الان <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m11 6-6 6 6 6"/></svg></a>
+    </div>
+  </div>
+
+  <!-- تواصل -->
+  <section class="contact" id="contact">
+    <div class="c-grid">
+      <div class="c-copy rv">
+        <h2>لديك قرار معلق على ارقام مبعثرة؟ <span class="accent">ارسلها لي.</span></h2>
+        <p>اكتب وضعك كما هو بدون ترتيب. اول قراءة للحالة بدون تكلفة وبرأي صريح: تحتاج نظام او يكفيك حل ابسط.</p>
+        <div class="c-direct">
+          <span class="lbl">او مباشرة:</span>
+          <a href="https://wa.me/966548767480" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.3 7.5L3 21l2-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg> واتساب <span class="num">+966 54 876 7480</span></a>
+          <a href="mailto:nawafgroup.office@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> nawafgroup.office@gmail.com</a>
+        </div>
+      </div>
+      <form id="contact-form" class="rv">
+        <div class="field">
+          <label for="f-name">الاسم</label>
+          <input id="f-name" name="name" type="text" required placeholder="اسمك الكريم">
+        </div>
+        <div class="field">
+          <label for="f-biz">نوع النشاط</label>
+          <input id="f-biz" name="biz" type="text" required placeholder="مطعم او متجر او مقاولات او غيره">
+        </div>
+        <div class="field">
+          <label for="f-msg">اوصف وضعك الحالي</label>
+          <textarea id="f-msg" name="msg" required placeholder="مثال: لدي 3 فروع وكل فرع يسجل مبيعاته في ملف مختلف ولا اعرف ايها يربح"></textarea>
+          <p class="hint">اكتب بطريقتك. انا من يرتب.</p>
+        </div>
+        <button type="submit">ارسل عبر واتساب</button>
+        <p class="form-note">الرسالة تفتح في واتسابك جاهزة بالتفاصيل وانت ترسلها بنفسك.</p>
+      </form>
+    </div>
+  </section>
+
+<section class="archive-page" id="archive" style="padding-top:70px">
+  <div class="sec-head rv" style="padding-bottom:6px"><span class="eyebrow">كل الاعمال</span><h2>الارشيف الكامل: <span class="accent num">22</span> نظام موثق</h2><p>كل مشروع نفذ لعميل حقيقي او منشأة حقيقية. افتح اي سطر لتقرأ المشكلة والنظام والنتيجة.</p></div>
+  <div class="filters" role="tablist" aria-label="تصفية المشاريع">
+    <button class="on" data-filter="all" type="button">الكل</button>
+    <button data-filter="dash" type="button">داشبوردات وتحليلات</button>
+    <button data-filter="sys" type="button">انظمة تشغيل</button>
+    <button data-filter="rep" type="button">تقارير تنفيذية</button>
+    <button data-filter="study" type="button">دراسات جدوى ونماذج</button>
+    <button data-filter="auto" type="button">اتمتة وادوات</button>
+  </div>
+  <div class="arch-list">
+
+    <article class="arow" data-case="p7" data-cat="sys">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">نظام ويب متكامل لصيانة المصاعد يولّد فيه العقد العمل</span>
+        <span class="side"><span class="cat">انظمة تشغيل</span><span class="stat num">35</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>تشغيل اسطول مصاعد كبير كان يمشي على الورق والواتساب: دوريات مختلفة تحسب يدويًا وتقارير تضيع في الرسائل وعقود تنتهي دون انتباه.</p></div>
+          <div class="part"><b>النظام</b><p>العقد هو المحرك: يولد مهام كل شهر تلقائيًا لكل مصعد مستحق ويوقفها عند انتهائه. لوحة ادارة بـ15 قسم ولوحة ميدانية للفني على الجوال بـ35 بند فحص، وتقرير رسمي بنفس النموذج المعتمد لدى الشركة.</p></div>
+          <div class="part"><b>النتيجة</b><p>مصدر واحد للحقيقة: مهام الشهر بضغطة وكل زيارة موثقة بتقريرها والعقود المقاربة للانتهاء مرئية قبل فوات وقتها.</p></div>
+        </div>
+        <div class="quote">شركة صيانة مصاعد · جدة<div class="who">نظام ويب · واجهتان وقاعدة بيانات واحدة</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-case="p1" data-cat="dash">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">داشبورد مبيعات ومخزون لمصنع منظفات في 6 فروع</span>
+        <span class="side"><span class="cat">داشبوردات</span><span class="stat num">63,933</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>المبيعات والمشتريات والمخزون والنواقص موزعة في ملفات منفصلة لكل فرع ولا احد يعرف اي فرع يربح فعليًا.</p></div>
+          <div class="part"><b>النظام</b><p>نمذجة كاملة للبيانات ثم داشبوردان تفاعليان على Power BI: مؤشرات الاداء والمبيعات حسب الفرع والمنتج والتوزيع الجغرافي للعملاء والمخزون لحظة بلحظة.</p></div>
+          <div class="part"><b>النتيجة</b><p>63,933 عملية بيع و938 عميل و1,754 وحدة مخزون في شاشة قرار واحدة تغطي 6 فروع. وفي الربع الرابع 2024 وحدها: 29,722 وحدة و434 عميل.</p></div>
+        </div>
+        <div class="quote">قطاع الصناعة والتوزيع<div class="who">Power BI · نمذجة بيانات</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-case="p2" data-cat="dash">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">داشبورد انذار مبكر لاقامات وجوازات 373 موظف</span>
+        <span class="side"><span class="cat">داشبوردات</span><span class="stat num">109</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>متابعة يدوية لانتهاء اقامات وجوازات 373 موظف واي تأخير يعني غرامات ومخالفات نظامية.</p></div>
+          <div class="part"><b>النظام</b><p>داشبورد استباقي يصنف الاقامات حسب موعد الانتهاء: اليوم او الاسبوع او الشهر او السنة او منتهية فعلًا. مع توزيع الموظفين حسب المهنة والجنسية ومقارنة تكاليف التجديد والمسؤول عن كل موظف.</p></div>
+          <div class="part"><b>النتيجة</b><p>النظام كشف 109 اقامات منتهية و260 تنتهي خلال السنة قبل ما تتحول الى غرامات.</p></div>
+        </div>
+        <div class="quote">قطاع المقاولات والعمالة<div class="who">Power BI · موارد بشرية</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="sys">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">نظام تقييم اداء موظفي كول سنتر</span>
+        <span class="side"><span class="cat">انظمة تشغيل</span><span class="stat">موضوعي</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>تقييمات الموظفين انطباعية بلا معايير موحدة والترقيات والملاحظات محل خلاف دائم.</p></div>
+          <div class="part"><b>النظام</b><p>محرك تقييم تلقائي على اكسل يحسب الدرجات من الالتزام بالحضور وعدد المكالمات ومتوسط مدتها والالتزام بالجدول. مع داشبورد مباشر للمشرف وتقرير للموارد البشرية يصنف الطلبات.</p></div>
+          <div class="part"><b>النتيجة</b><p>تقييم رقمي موضوعي بدل الانطباعات ومتابعة لحظية بدل تقارير شهرية متأخرة.</p></div>
+        </div>
+        <div class="quote">قطاع خدمة العملاء<div class="who">اكسل · محرك درجات تلقائي</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-case="p4" data-cat="study">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">دراسة جدوى شقق فندقية: 18 وحدة او 33؟</span>
+        <span class="side"><span class="cat">دراسات جدوى</span><span class="stat num">83%</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>مطور في حي العليا بالخبر امامه تصميمان والفرق بينهما ملايين ولا توجد اجابة مبنية على السوق.</p></div>
+          <div class="part"><b>النظام</b><p>تقييم ميداني للموقع ثم تحليل سوق بثلاثة مشاريع مشابهة ثم مقارنة مالية كاملة: الايراد السنوي وصافي الربح وفترة الاسترداد لكل تصميم.</p></div>
+          <div class="part"><b>النتيجة</b><p>توصية صريحة بتصميم 33 وحدة بزيادة 83% في الوحدات مبنية على ارقام كاملة لكل سيناريو.</p></div>
+        </div>
+        <div class="quote">قطاع التطوير العقاري · الخبر<div class="who">دراسة جدوى · تحليل سوق</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-case="p3" data-cat="sys">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">مطعم ورقة: نظام تشغيل واداري كامل</span>
+        <span class="side"><span class="cat">انظمة تشغيل</span><span class="stat num">30+</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>تشغيل يومي بلا هيكل: مصاريف غير واضحة بين الشركاء ورواتب متأخرة اكثر من شهرين وشراء من كاش التشغيل ومطبخ مركزي غير مستغل.</p></div>
+          <div class="part"><b>النظام</b><p>8 اقسام مترابطة: المالية والعمليات والمبيعات والمنصات والتسويق والموارد البشرية وسجل القرارات والتقارير التنفيذية ووثائق الادارة. مع رواتب وحضور وجزاءات وتحليل 3 منصات توصيل وتشخيص تشغيلي.</p></div>
+          <div class="part"><b>النتيجة</b><p>اكثر من 30 ملف تشغيلي في منظومة واحدة بدل التخمين اليومي مع خطة نمو 60 يوم لفرع العزيزية.</p></div>
+        </div>
+        <div class="quote">قطاع المطاعم · المدينة المنورة<div class="who">اكسل وقوقل شيتس · 8 اقسام</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-case="p6" data-cat="sys">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">نظام محاسبي متكامل من 22 ورقة مترابطة</span>
+        <span class="side"><span class="cat">انظمة تشغيل</span><span class="stat num">22</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>منشأة صغيرة تحتاج محاسبة كاملة والبدائل اما اشتراكات سنوية مكلفة او محاسب شهري يفوق قدرتها.</p></div>
+          <div class="part"><b>النظام</b><p>22 ورقة اكسل مترابطة تغطي الدورة كاملة: شجرة الحسابات والعملاء والموردين والمخزون والمبيعات والمشتريات والنقدية والقيود والاصول والرواتب والضريبة وميزان المراجعة والقوائم المالية والتسويات وتقارير الاعمار والاداء الشهري.</p></div>
+          <div class="part"><b>النتيجة</b><p>من القيد الاول الى القوائم المالية في ملف واحد بدون اشتراكات وبدون انتظار.</p></div>
+        </div>
+        <div class="quote">المنشآت الصغيرة والمتوسطة<div class="who">اكسل · دورة محاسبية كاملة</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="auto">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">اتمتة دورة الطلب كاملة: ادخال واحد بدل اربعة</span>
+        <span class="side"><span class="cat">اتمتة</span><span class="stat num">1=4</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>الطلب الواحد يسجل في اربعة اماكن: سجل الطلبات وورقة المخزون وملف العميل وملخص الضريبة. والادخال اليدوي المتكرر يعني اخطاء وارقام متعارضة.</p></div>
+          <div class="part"><b>النظام</b><p>دورة واحدة مؤتمتة: ادخال الطلب مرة واحدة يخصم المخزون ويحدث ملف العميل وتصنيفه ويغذي الداشبورد وملخص الضريبة. الطلبات الملغاة والمرتجعة تعالج صح: تحذف من المبيعات ويرجع المرتجع للمخزون.</p></div>
+          <div class="part"><b>النتيجة</b><p>ادخال واحد بدل اربعة وصفر اخطاء نقل يدوي بين الملفات.</p></div>
+        </div>
+        <div class="quote">قطاع التجزئة والمشاريع الصغيرة<div class="who">اكسل · اتمتة داخلية</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="rep">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">تقرير مالي تنفيذي لمنشأة كبيرة متعددة المرافق</span>
+        <span class="side"><span class="cat">تقارير تنفيذية</span><span class="stat num">179M</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>القيادة التنفيذية تحتاج صورة مالية مركزة لفترة محددة لا قوائم تفصيلية يصعب قراءتها في الاجتماعات.</p></div>
+          <div class="part"><b>النظام</b><p>تقرير مالي تنفيذي لفترة يوليو واغسطس 2025 يلخص الايرادات والمصروفات والنقد المتاح واداء التحصيل في صفحة واحدة مع التفاصيل الداعمة.</p></div>
+          <div class="part"><b>النتيجة</b><p>179 مليون ايرادات و119 مليون مصروفات و60 مليون نقد متبقي بعد الالتزامات ونسبة تحصيل 85% بتحصيل 151.86 مليون من الذمم.</p></div>
+        </div>
+        <div class="quote">منشأة كبيرة متعددة المرافق<div class="who">تقرير تنفيذي · صفحة قرار واحدة</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="rep">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">تحليل الاداء المالي لمجموعة مدارس متعددة الاقسام</span>
+        <span class="side"><span class="cat">تقارير تنفيذية</span><span class="stat num">22%</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>الارقام المجمعة تخفي اي قسم يربح واي قسم يستهلك الموارد والقرارات تتخذ على الاجماليات لا على المصادر.</p></div>
+          <div class="part"><b>النظام</b><p>تحليل الايرادات والمصروفات والربحية مفصلة حسب القسم مع الهيكل المالي وهامش الربح لكل وحدة وملخص تنفيذي.</p></div>
+          <div class="part"><b>النتيجة</b><p>100.6 مليون ايرادات مقابل 78.7 مليون مصروفات وصافي ربح 21.9 مليون بهامش 22% مفصل حسب القسم بدل رقم واحد مبهم.</p></div>
+        </div>
+        <div class="quote">قطاع التعليم<div class="who">تحليل مالي · ربحية الاقسام</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-case="p5" data-cat="rep">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">تقرير قرار: هل الشركة جاهزة للتوسع الاقليمي؟</span>
+        <span class="side"><span class="cat">تقارير تنفيذية</span><span class="stat num">91%</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>شركة SaaS سعودية تدرس التوسع الاقليمي والسؤال الحرج: هل هي جاهزة فعلًا الان؟</p></div>
+          <div class="part"><b>النظام</b><p>تقرير قرار تنفيذي يحلل المؤشرات الحقيقية: تباطؤ نمو الايرادات وتركز مصادر الدخل وارتفاع تكلفة اكتساب العميل.</p></div>
+          <div class="part"><b>النتيجة</b><p>النمو تباطأ من 32% الى 14% خلال 12 شهر و91% من الايراد من السوق المحلي وتكلفة الاكتساب ارتفعت 18%. الخلاصة الصريحة: المنتج قوي محليًا والتوسع الفوري مخاطرة عالية.</p></div>
+        </div>
+        <div class="quote">قطاع التقنية · SaaS<div class="who">تقرير قرار · توصية صريحة</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="rep">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">تقرير تقدم محفظة انظمة تحت التطوير</span>
+        <span class="side"><span class="cat">تقارير تنفيذية</span><span class="stat num">4</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>اربعة انظمة تطور بالتوازي وكل فريق يقول اننا على المسار بدون قياس موحد يكشف الوضع الفعلي.</p></div>
+          <div class="part"><b>النظام</b><p>تقرير شهري يقيس نسبة الاكتمال لكل نظام ومراحله الفرعية: ادخال البيانات القديمة والتحديث الشهري والمراجعة النهائية في داشبورد واحد.</p></div>
+          <div class="part"><b>النتيجة</b><p>صورة واضحة للمحفظة في يوليو 2025: المخزون 100% والتصاريح 85% والنقل 45% والاسكان 22%. والموارد توجهت للانظمة المتأخرة لا المكتملة.</p></div>
+        </div>
+        <div class="quote">جهة تدير انظمة متوازية<div class="who">قياس تقدم · داشبورد محفظة</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="rep">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">تقرير اسبوعي موحد لقسم التصاريح</span>
+        <span class="side"><span class="cat">تقارير تنفيذية</span><span class="stat">اسبوعي</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>حركة تصاريح يومية كثيفة بلا ملخص دوري والادارة تكتشف الاختناقات متأخرة.</p></div>
+          <div class="part"><b>النظام</b><p>قالب تقرير اسبوعي موحد يعرض حركة التصاريح خلال الفترة بشكل بصري جاهز للعرض على الادارة.</p></div>
+          <div class="part"><b>النتيجة</b><p>ايقاع اسبوعي ثابت للمتابعة بدل تقارير متفرقة حسب الطلب.</p></div>
+        </div>
+        <div class="quote">جهة تدير تصاريح دخول وخروج<div class="who">قالب موحد · ايقاع ثابت</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="study">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">دراسة مقارنة: الاختبار الوطني للثقافة المالية مقابل PISA</span>
+        <span class="side"><span class="cat">دراسات</span><span class="stat num">6,928</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>نتائج الاختبار الوطني تحتاج مرجعية دولية لان الرقم وحده لا يقول هل الاداء جيد او متأخر.</p></div>
+          <div class="part"><b>النظام</b><p>دراسة مقارنة بين نتائج الاختبار الوطني للثقافة المالية 2026 ونتائج PISA 2022 بتحليل المجالات ومستويات الكفاءة الخمسة وحجم العينة.</p></div>
+          <div class="part"><b>النتيجة</b><p>تقييم مرجعي لعينة 6,928 طالب في 193 مدرسة ضمن مجتمع 317,500 طالب بعمر 15 سنة.</p></div>
+        </div>
+        <div class="quote">قطاع التعليم والسياسات<div class="who">دراسة مقارنة دولية</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="study">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">مقارنة عروض اسعار فنادق المنطقة الشرقية</span>
+        <span class="side"><span class="cat">دراسات</span><span class="stat">اطار واحد</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>عروض متفرقة من عدة فنادق بصيغ مختلفة يستحيل مقارنتها او اتخاذ قرار تعاقد عادل بينها.</p></div>
+          <div class="part"><b>النظام</b><p>دراسة موحدة تجمع العروض في اطار واحد وتقارن خيار التعاقد المؤسسي مع خيار الحجز الذاتي.</p></div>
+          <div class="part"><b>النتيجة</b><p>اساس واضح لقرار التعاقد بدل الاختيار بالانطباع.</p></div>
+        </div>
+        <div class="quote">خدمات الشركات واسكان الموظفين<div class="who">توحيد عروض · مقارنة قرار</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="rep">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">التقرير السنوي لمجلس الادارة</span>
+        <span class="side"><span class="cat">تقارير تنفيذية</span><span class="stat">وثيقة واحدة</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>المشكلة</b><p>المجلس يحتاج وثيقة واحدة تجمع الاداء المالي والانجازات الاستراتيجية لا عروض متفرقة من الادارات تجمع في اخر لحظة.</p></div>
+          <div class="part"><b>النظام</b><p>تقرير سنوي موحد يعرض الاداء المالي والانجازات التشغيلية عبر المرافق في وثيقة واحدة بمستوى مجلس ادارة.</p></div>
+          <div class="part"><b>النتيجة</b><p>مرجع واحد يناقش في الاجتماع بدل التجميع المتعجل.</p></div>
+        </div>
+        <div class="quote">منشأة متعددة المرافق<div class="who">تقرير مجلس ادارة</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="sys">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">نظام حضور وانصراف على قوقل شيتس</span>
+        <span class="side"><span class="cat">انظمة تشغيل</span><span class="stat">5/5</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>العمل</b><p>نظام حضور وانصراف سحابي على قوقل شيتس يتيح للفريق التسجيل من اي مكان مع تقارير جاهزة للادارة.</p></div>
+        </div>
+        <div class="quote">«بدون مبالغة هذا الشخص افضل من تعاملت معهم عن بعد. جزاه الله خير»<div class="who">تقييم العميل الموثق · 5/5</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="sys">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">تأسيس نظام محاسبة لمنشأة زراعية</span>
+        <span class="side"><span class="cat">انظمة تشغيل</span><span class="stat">5/5</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>العمل</b><p>تأسيس دورة محاسبية كاملة لمنشأة زراعية من الصفر بما يناسب طبيعة نشاطها الموسمي.</p></div>
+        </div>
+        <div class="quote">«يعطيك العافية على العمل الذي قدمته»<div class="who">تقييم العميل الموثق · 5/5</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="dash">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">داشبورد ذاتي التحديث</span>
+        <span class="side"><span class="cat">داشبوردات</span><span class="stat">5/5</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>العمل</b><p>داشبورد يحدث نفسه تلقائيًا مع كل ادخال جديد بدون اي خطوة يدوية من العميل.</p></div>
+        </div>
+        <div class="quote">«مبدع حرفيًا، انصح الجميع بالتعامل مع نواف»<div class="who">تقييم العميل الموثق · 5/5</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="auto">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">استخراج بيانات مالية من كشوف بنكية</span>
+        <span class="side"><span class="cat">اتمتة</span><span class="stat">5/5</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>العمل</b><p>تحويل كشوف بنكية غير منظمة الى بيانات مالية مصنفة جاهزة للتحليل والمراجعة.</p></div>
+        </div>
+        <div class="quote">«افضل من اخرج لي البيانات، بشكل سريع ومتجاوب جدًا»<div class="who">تقييم العميل الموثق · 5/5</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="auto">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">حاسبة تكاليف مشاريع على اكسل</span>
+        <span class="side"><span class="cat">ادوات</span><span class="stat">5/5</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>العمل</b><p>اداة اكسل تحسب تكلفة المشروع بمكوناته وتعطي السعر النهائي المناسب قبل تقديم العرض.</p></div>
+        </div>
+        <div class="quote">«رائع بالتعامل وبالعمل»<div class="who">تقييم العميل الموثق · 5/5</div></div>
+      </div></div></div>
+    </article>
+
+    <article class="arow" data-cat="rep">
+      <button class="arow-head" type="button" aria-expanded="false">
+        <span class="t">استراتيجية مبيعات وتقاريرها</span>
+        <span class="side"><span class="cat">تقارير تنفيذية</span><span class="stat">5/5</span><span class="chev">+</span></span>
+      </button>
+      <div class="arow-body"><div class="arow-in"><div class="arow-pad">
+        <div>
+          <div class="part"><b>العمل</b><p>بناء استراتيجية مبيعات مع تقاريرها الدورية التي تقيس التقدم وتكشف اين تتسرب الفرص.</p></div>
+        </div>
+        <div class="quote">«محترف في الاعمال وسريع في الانجاز»<div class="who">تقييم العميل الموثق · 5/5</div></div>
+      </div></div></div>
+    </article>
+
+  </div>
+</section>
+
+  <footer>
+    <span>نواف الشريف · انظمة بيانات واتمتة اعمال · منذ 2020</span>
+    <div class="fl">
+      <a href="#archive">الارشيف</a>
+      <a href="https://mostaql.com/u/EngNawaf" target="_blank" rel="noopener">مستقل</a>
+      <a href="https://claude.ai/code/artifact/30946092-ea26-49a1-8604-75b38b28c00d" target="_blank" rel="noopener">English</a>
+    </div>
+  </footer>
+</div>
+
+<!-- بيانات المشاريع -->
+<div id="case-data" hidden>
+  <div data-case="p7">
+    <div class="cgallery"><img class="cg-main" src="__G_P7_1__" alt="لوحة اليوم في نظام صيانة المصاعد">
+      <div class="cg-thumbs">
+        <button class="cg-th on" type="button" data-full="__G_P7_1__"><img src="__G_P7_1__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__G_P7_2__"><img src="__G_P7_2__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__G_P7_3__"><img src="__G_P7_3__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__G_P7_4__"><img src="__G_P7_4__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__G_P7_5__"><img src="__G_P7_5__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__G_P7_6__"><img src="__G_P7_6__" alt=""></button>
+      </div></div>
+    <span class="cat-tag">نظام تشغيل ويب متكامل · واجهتان وقاعدة بيانات واحدة</span>
+    <h3>صيانة المصاعد: العقد يولّد العمل</h3>
+    <p class="sector">شركة صيانة مصاعد في جدة تدير اسطول مصاعد كبير لعشرات العملاء والمواقع</p>
+    <div class="part"><b>المشكلة</b><p>التشغيل كله كان يمشي على الورق والواتساب: كل عميل بدورية صيانة مختلفة والحساب الشهري يدوي وينسى، تقارير الفنيين تضيع في الرسائل، عقود تنتهي دون ان ينتبه لها احد فتستمر الصيانة بلا عقد، وطلبات قطع الغيار تضيع بين المحادثات فلا تصل للمورد.</p></div>
+    <div class="part"><b>النظام</b><p>الفكرة التي بني عليها النظام كله ان العقد هو المحرك: تاريخ بدايته ونهايته ودوريته تولد مهام كل شهر تلقائيًا لكل مصعد مستحق، واذا انتهى العقد يتحول لونه الى الاحمر في كل شاشة وتتوقف مهامه ويظهر للفني تنبيه بمراجعة الادارة. وواجهتان مختلفتان تمامًا: لوحة ادارة بـ15 قسم للحاسب، ولوحة ميدانية للفني على الجوال يدخلها برمز واحد ويسجل منها الزيارة بالصور و35 بند فحص. والتقرير الرسمي يصدر بنفس النموذج الورقي المعتمد لدى الشركة معبأ آليًا وجاهز للطباعة.</p></div>
+    <div class="part"><b>النتيجة</b><p>مصدر واحد للحقيقة بدل الورق والرسائل: توليد مهام الشهر صار بضغطة بدل حساب يدوي لعشرات الدوريات المختلفة، وكل زيارة موثقة بوقتها وصورها وتقريرها الرسمي، والعقود المقاربة للانتهاء صارت مرئية قبل فوات وقتها، وطلبات القطع مرتبة لكل عميل بحالتها وموردها. والنظام قائم على خطط سحابية تكلفتها الحالية صفر وتتوسع مع نمو البيانات.</p></div>
+    <div class="kpis">
+      <div class="kpi"><div class="v num">35</div><div class="l">بند فحص بنفس النموذج المعتمد</div></div>
+      <div class="kpi"><div class="v num">15</div><div class="l">قسم في لوحة الادارة و4 للفني</div></div>
+      <div class="kpi"><div class="v num">2</div><div class="l">واجهتان: ادارة للحاسب وميدان للجوال</div></div>
+      <div class="kpi"><div class="v num">3</div><div class="l">ادوار بصلاحيات تحكمها قاعدة البيانات</div></div>
+    </div>
+    <a class="ask" href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%A7%D8%A8%D8%BA%D9%89%20%D9%86%D8%B8%D8%A7%D9%85%20%D8%AA%D8%B4%D8%BA%D9%8A%D9%84%20%D9%85%D8%B4%D8%A7%D8%A8%D9%87%20%D9%84%D9%86%D8%B4%D8%A7%D8%B7%D9%8A" target="_blank" rel="noopener">اريد نظام تشغيل مشابه لنشاطي</a>
+    <p class="pd-note">البيانات الظاهرة في الصور تجريبية بالكامل، وهوية العميل محجوبة بطلبه.</p>
+  </div>
+  <div data-case="p1">
+    <div class="cgallery"><img class="cg-main" src="__G_P1_1__" alt="داشبورد المبيعات والمخزون">
+      <div class="cg-thumbs">
+        <button class="cg-th on" type="button" data-full="__G_P1_1__"><img src="__G_P1_1__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__G_P1_2__"><img src="__G_P1_2__" alt=""></button>
+      </div></div>
+    <span class="cat-tag">داشبورد مبيعات ومخزون · Power BI</span>
+    <h3>مصنع منظفات في 6 فروع</h3>
+    <p class="sector">قطاع الصناعة والتوزيع · السعودية</p>
+    <div class="part"><b>المشكلة</b><p>المبيعات والمشتريات والمخزون والنواقص موزعة في ملفات منفصلة لكل فرع. الادارة تجمع الارقام يدويًا ولا احد يعرف اي فرع يربح فعليًا.</p></div>
+    <div class="part"><b>النظام</b><p>نمذجة كاملة للبيانات ثم داشبوردان تفاعليان على Power BI: مؤشرات الاداء والمبيعات حسب الفرع والمنتج والتوزيع الجغرافي للعملاء والمخزون لحظة بلحظة.</p></div>
+    <div class="part"><b>النتيجة</b><p>6 فروع صارت في شاشة قرار واحدة. المالك يفتح الداشبورد بدل ان يفتح 9 ملفات.</p></div>
+    <div class="kpis">
+      <div class="kpi"><div class="v num">63,933</div><div class="l">عملية بيع موحدة في النصف الاول 2025</div></div>
+      <div class="kpi"><div class="v num">938</div><div class="l">عميل في قاعدة واحدة</div></div>
+      <div class="kpi"><div class="v num">1,754</div><div class="l">وحدة مخزون مراقبة</div></div>
+      <div class="kpi"><div class="v num">6</div><div class="l">فروع في شاشة واحدة</div></div>
+    </div>
+    <a class="ask" href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%A7%D8%A8%D8%BA%D9%89%20%D8%AF%D8%A7%D8%B4%D8%A8%D9%88%D8%B1%D8%AF%20%D9%85%D8%B4%D8%A7%D8%A8%D9%87%20%D9%84%D9%86%D8%B4%D8%A7%D8%B7%D9%8A" target="_blank" rel="noopener">اريد داشبورد مشابه لنشاطي</a>
+  </div>
+  <div data-case="p2">
+    <div class="cgallery"><img class="cg-main" src="__G_P2_1__" alt="لوحة مراقبة الاقامات"></div>
+    <span class="cat-tag">نظام انذار مبكر · Power BI</span>
+    <h3>373 اقامة وجواز تحت المراقبة</h3>
+    <p class="sector">قطاع المقاولات والعمالة · السعودية</p>
+    <div class="part"><b>المشكلة</b><p>متابعة يدوية لانتهاء اقامات وجوازات 373 موظف. اي تأخير يعني غرامات ومخالفات نظامية تكتشف بعد فوات الاوان.</p></div>
+    <div class="part"><b>النظام</b><p>داشبورد انذار استباقي يصنف الاقامات: تنتهي اليوم او هذا الاسبوع او هذا الشهر او هذي السنة او منتهية فعلًا. مع توزيع الموظفين حسب المهنة والجنسية ومقارنة تكاليف التجديد والمسؤول عن كل موظف.</p></div>
+    <div class="part"><b>النتيجة</b><p>النظام كشف من اول تشغيل ما كان مخفيًا في الملفات: عشرات الاقامات المنتهية قبل ان تتحول الى غرامات.</p></div>
+    <div class="kpis">
+      <div class="kpi"><div class="v num">373</div><div class="l">موظف تحت المراقبة</div></div>
+      <div class="kpi"><div class="v num">109</div><div class="l">اقامة منتهية اكتشفها النظام</div></div>
+      <div class="kpi"><div class="v num">260</div><div class="l">اقامة تنتهي خلال السنة</div></div>
+      <div class="kpi"><div class="v num">0</div><div class="l">مفاجآت بعد تشغيل النظام</div></div>
+    </div>
+    <a class="ask" href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%A7%D8%A8%D8%BA%D9%89%20%D9%86%D8%B8%D8%A7%D9%85%20%D9%85%D8%AA%D8%A7%D8%A8%D8%B9%D8%A9%20%D8%A7%D9%82%D8%A7%D9%85%D8%A7%D8%AA" target="_blank" rel="noopener">اريد نظام مشابه لمنشأتي</a>
+  </div>
+  <div data-case="p3">
+    <div class="cgallery"><img class="cg-main" src="__G_P3_1__" alt="نظام التشغيل">
+      <div class="cg-thumbs">
+        <button class="cg-th on" type="button" data-full="__G_P3_1__"><img src="__G_P3_1__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__G_P3_2__"><img src="__G_P3_2__" alt=""></button>
+      </div></div>
+    <span class="cat-tag">نظام تشغيل كامل · اكسل وقوقل شيتس</span>
+    <h3>مطعم ورقة: نظام تشغيل كامل</h3>
+    <p class="sector">قطاع المطاعم · المدينة المنورة · فرع العزيزية ومطبخ مركزي</p>
+    <div class="part"><b>المشكلة</b><p>تشغيل يومي بلا هيكل: مصاريف غير واضحة التوزيع بين الشركاء ورواتب متأخرة اكثر من شهرين وشراء من كاش التشغيل بلا دورة مالية ومطبخ مركزي غير مستغل.</p></div>
+    <div class="part"><b>النظام</b><p>8 اقسام تشغيلية مترابطة: الادارة المالية والعمليات والمبيعات والمنصات والتسويق والنمو والموارد البشرية وسجل القرارات والتقارير التنفيذية ووثائق الادارة. مع انظمة رواتب وحضور وجزاءات وتحليل لثلاث منصات توصيل.</p></div>
+    <div class="part"><b>النتيجة</b><p>اكثر من 30 ملف تشغيلي في منظومة واحدة بدل التخمين اليومي، مع خطة نمو 60 يوم لفرع العزيزية.</p></div>
+    <div class="kpis">
+      <div class="kpi"><div class="v num">8</div><div class="l">اقسام تشغيلية مترابطة</div></div>
+      <div class="kpi"><div class="v num">30+</div><div class="l">ملف تشغيلي في منظومة واحدة</div></div>
+      <div class="kpi"><div class="v num">3</div><div class="l">منصات توصيل تحللت ارقامها</div></div>
+      <div class="kpi"><div class="v num">60</div><div class="l">يوم مدة خطة النمو المسلمة</div></div>
+    </div>
+    <a class="ask" href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D9%85%D8%B7%D8%B9%D9%85%20%D9%88%D8%A7%D8%A8%D8%BA%D9%89%20%D9%86%D8%B8%D8%A7%D9%85%20%D8%AA%D8%B4%D8%BA%D9%8A%D9%84" target="_blank" rel="noopener">لدي مطعم واحتاج نظام مشابه</a>
+  </div>
+  <div data-case="p4">
+    <div class="cgallery"><img class="cg-main" src="__G_P4_1__" alt="دراسة الجدوى العقارية">
+      <div class="cg-thumbs">
+        <button class="cg-th on" type="button" data-full="__G_P4_1__"><img src="__G_P4_1__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__G_P4_2__"><img src="__G_P4_2__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__G_P4_3__"><img src="__G_P4_3__" alt=""></button>
+      </div></div>
+    <span class="cat-tag">دراسة جدوى عقارية</span>
+    <h3>الخبر: 18 وحدة او 33؟</h3>
+    <p class="sector">قطاع التطوير العقاري · حي العليا · الخبر</p>
+    <div class="part"><b>المشكلة</b><p>مطور امامه تصميمان لشقق فندقية والفرق بينهما ملايين. الحماس يقول الاكثر والخوف يقول الاقل والسوق لم يسأله احد.</p></div>
+    <div class="part"><b>النظام</b><p>تقييم ميداني للموقع ثم تحليل سوق بثلاثة مشاريع مشابهة ثم مقارنة مالية كاملة بين التصميمين: الايراد السنوي وصافي الربح وفترة استرداد رأس المال لكل سيناريو.</p></div>
+    <div class="part"><b>النتيجة</b><p>توصية صريحة بتصميم 33 وحدة بزيادة 83% في الوحدات، مبنية على ارقام كاملة لكل سيناريو لا على انطباع.</p></div>
+    <div class="kpis">
+      <div class="kpi"><div class="v num">33</div><div class="l">وحدة في التصميم الموصى به</div></div>
+      <div class="kpi"><div class="v num">83%</div><div class="l">زيادة في عدد الوحدات</div></div>
+      <div class="kpi"><div class="v num">3</div><div class="l">مشاريع مشابهة حللت للمقارنة</div></div>
+      <div class="kpi"><div class="v num">2</div><div class="l">سيناريوهان ماليان كاملان</div></div>
+    </div>
+    <a class="ask" href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%A7%D8%A8%D8%BA%D9%89%20%D8%AF%D8%B1%D8%A7%D8%B3%D8%A9%20%D8%AC%D8%AF%D9%88%D9%89" target="_blank" rel="noopener">لدي قرار استثماري مشابه</a>
+  </div>
+  <div data-case="p5">
+    <div class="cgallery"><img class="cg-main" src="__G_P5_1__" alt="تقرير القرار التنفيذي"></div>
+    <span class="cat-tag">تقرير قرار تنفيذي</span>
+    <h3>شركة تقنية تسأل: نتوسع الان؟</h3>
+    <p class="sector">قطاع التقنية · شركة SaaS سعودية</p>
+    <div class="part"><b>المشكلة</b><p>الشركة تدرس التوسع الاقليمي والسؤال الحرج: هل هي جاهزة فعلًا الان؟ الحماس وحده لا يجيب.</p></div>
+    <div class="part"><b>النظام</b><p>تقرير قرار تنفيذي يحلل المؤشرات الحقيقية: تباطؤ نمو الايرادات وتركز مصادر الدخل وارتفاع تكلفة اكتساب العميل. وينتهي بتوصية صريحة.</p></div>
+    <div class="part"><b>النتيجة</b><p>كشف التقرير ان النمو تباطأ من 32% الى 14% خلال 12 شهر وان 91% من الايراد من السوق المحلي وان تكلفة اكتساب العميل ارتفعت 18%. الخلاصة: المنتج قوي محليًا لكن التوسع الفوري مخاطرة عالية.</p></div>
+    <div class="kpis">
+      <div class="kpi"><div class="v num">14%</div><div class="l">نسبة النمو بعد ان كانت 32% قبل 12 شهر</div></div>
+      <div class="kpi"><div class="v num">91%</div><div class="l">من الايراد من السوق المحلي</div></div>
+      <div class="kpi"><div class="v num">+18%</div><div class="l">ارتفاع تكلفة اكتساب العميل</div></div>
+      <div class="kpi"><div class="v">صريحة</div><div class="l">توصية نهائية مكتوبة</div></div>
+    </div>
+    <a class="ask" href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%A7%D8%A8%D8%BA%D9%89%20%D8%AA%D9%82%D8%B1%D9%8A%D8%B1%20%D9%82%D8%B1%D8%A7%D8%B1%20%D8%AA%D9%86%D9%81%D9%8A%D8%B0%D9%8A" target="_blank" rel="noopener">احتاج تقرير قرار مشابه</a>
+  </div>
+  <div data-case="p6">
+    <div class="cgallery"><img class="cg-main" src="__G_P6_1__" alt="النظام المحاسبي">
+      <div class="cg-thumbs">
+        <button class="cg-th on" type="button" data-full="__G_P6_1__"><img src="__G_P6_1__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__G_P6_2__"><img src="__G_P6_2__" alt=""></button>
+      </div></div>
+    <span class="cat-tag">نظام محاسبي · اكسل</span>
+    <h3>دورة محاسبية كاملة في ملف واحد</h3>
+    <p class="sector">المنشآت الصغيرة والمتوسطة</p>
+    <div class="part"><b>المشكلة</b><p>منشأة صغيرة تحتاج محاسبة كاملة والبدائل اما اشتراكات سنوية مكلفة او محاسب شهري يفوق قدرتها.</p></div>
+    <div class="part"><b>النظام</b><p>نظام اكسل من 22 ورقة مترابطة يغطي الدورة كاملة: شجرة الحسابات والعملاء والموردين والمخزون والمبيعات والمشتريات والنقدية والقيود والاصول الثابتة والرواتب والضريبة وميزان المراجعة وقائمة الدخل والميزانية والتدفقات النقدية والتسويات وتقارير الاعمار والاداء الشهري.</p></div>
+    <div class="part"><b>النتيجة</b><p>من القيد الاول الى القوائم المالية في ملف واحد. بدون اشتراكات وبدون انتظار.</p></div>
+    <div class="kpis">
+      <div class="kpi"><div class="v num">22</div><div class="l">ورقة عمل مترابطة</div></div>
+      <div class="kpi"><div class="v num">4</div><div class="l">قوائم مالية تصدر تلقائيًا</div></div>
+      <div class="kpi"><div class="v num">0</div><div class="l">اشتراكات شهرية</div></div>
+      <div class="kpi"><div class="v num">15%</div><div class="l">ضريبة القيمة المضافة محسوبة</div></div>
+    </div>
+    <a class="ask" href="https://wa.me/966548767480?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%88%D8%A7%D9%81%D8%8C%20%D8%A7%D8%A8%D8%BA%D9%89%20%D9%86%D8%B8%D8%A7%D9%85%20%D9%85%D8%AD%D8%A7%D8%B3%D8%A8%D9%8A" target="_blank" rel="noopener">اريد نظام محاسبي مشابه</a>
+  </div>
+</div>
+
+<!-- بيانات الانظمة الجاهزة -->
+<div id="product-data" hidden>
+  <div data-prod="free">
+    <div class="cgallery"><img class="cg-main" src="__PG_FREE_1__" alt="حاسبة التسعير والربح">
+      <div class="cg-thumbs">
+        <button class="cg-th on" type="button" data-full="__PG_FREE_1__"><img src="__PG_FREE_1__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__PG_FREE_2__"><img src="__PG_FREE_2__" alt=""></button>
+      </div></div>
+    <span class="pd-badge">مجاني · بدون بطاقة</span>
+    <h3>حاسبة التسعير والربح</h3>
+    <p class="sector">ملف اكسل جاهز · تسليم فوري</p>
+    <div class="part"><p>ملف اكسل مجاني للمشاريع الصغيرة يظهر لك هامش ربحك الحقيقي قبل ان تحدد اسعارك. تدخل تكاليفك وهامش الربح المستهدف فيحسب لك السعر المناسب لكل منتج ويوضح نقطة التعادل ويقيم اسعارك الحالية بالالوان.</p></div>
+    <ul class="feat">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>حساب السعر تلقائيًا من هامش الربح المستهدف</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>نقطة التعادل لكل منتج</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>تقييم اسعارك الحالية بالالوان</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>حتى 25 منتج</li>
+    </ul>
+    <div class="pd-price num">0 <i>بدون بطاقة</i></div>
+    <a class="ask waorder" data-msg="مرحبا نواف، ابغى الحاسبة المجانية للتسعير والربح" target="_blank" rel="noopener">ارسلها لي</a>
+    <p class="pd-note">تسليم فوري على الواتساب.</p>
+  </div>
+
+  <div data-prod="store">
+    <div class="cgallery"><img class="cg-main" src="__PG_STORE_1__" alt="نظام ادارة المتجر">
+      <div class="cg-thumbs">
+        <button class="cg-th on" type="button" data-full="__PG_STORE_1__"><img src="__PG_STORE_1__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__PG_STORE_2__"><img src="__PG_STORE_2__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__PG_STORE_3__"><img src="__PG_STORE_3__" alt=""></button>
+      </div></div>
+    <span class="pd-badge">الاشمل</span>
+    <h3>نظام ادارة المتجر</h3>
+    <p class="sector">ملف اكسل متكامل · تسليم فوري</p>
+    <div class="part"><p>دورة متجرك كاملة في ملف واحد من تسجيل الطلب الى ملخص الضريبة. يدير الطلبات والمنتجات وقاعدة العملاء ويصنفهم تلقائيًا ويعرض داشبورد باثني عشر مؤشرًا مع ملخص ضريبة القيمة المضافة ربع سنوي جاهز للتقديم.</p></div>
+    <ul class="feat">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>حتى 2,000 طلب و300 منتج</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>قاعدة عملاء بتصنيف تلقائي</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>داشبورد بـ12 مؤشر</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>ملخص ضريبة القيمة المضافة ربع السنوي</li>
+    </ul>
+    <div class="pd-price num">349 <i>ريال · دفعة واحدة</i></div>
+    <a class="ask amber waorder" data-msg="مرحبا نواف، ابغى اطلب نظام ادارة المتجر" target="_blank" rel="noopener">اطلبه الان</a>
+    <p class="pd-note">تسليم فوري بعد الشراء مع ضمان استرجاع 14 يوم.</p>
+  </div>
+
+  <div data-prod="ribhi">
+    <div class="cgallery"><img class="cg-main" src="__PG_RIBHI_1__" alt="نظام ربحي">
+      <div class="cg-thumbs">
+        <button class="cg-th on" type="button" data-full="__PG_RIBHI_1__"><img src="__PG_RIBHI_1__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__PG_RIBHI_2__"><img src="__PG_RIBHI_2__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__PG_RIBHI_3__"><img src="__PG_RIBHI_3__" alt=""></button>
+      </div></div>
+    <span class="pd-badge">للتسعير</span>
+    <h3>ربحي</h3>
+    <p class="sector">ملف اكسل جاهز · تسليم فوري</p>
+    <div class="part"><p>نظام تسعير وارباح متكامل. تدخل التكلفة فيظهر لك السعر المناسب فورًا ويحتفظ بسجل كامل لارباحك مع تتبع تكاليفك الشهرية الثابتة وداشبورد يعطيك توصيات عملية.</p></div>
+    <ul class="feat">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>حاسبة تسعير فورية</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>حتى 1,000 منتج و5,000 طلب</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>تكاليف شهرية ثابتة حتى 500 بند</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>داشبورد بتوصيات</li>
+    </ul>
+    <div class="pd-price num">289 <i>ريال · دفعة واحدة</i></div>
+    <a class="ask amber waorder" data-msg="مرحبا نواف، ابغى اطلب نظام ربحي" target="_blank" rel="noopener">اطلبه الان</a>
+    <p class="pd-note">تسليم فوري بعد الشراء مع ضمان استرجاع 14 يوم.</p>
+  </div>
+
+  <div data-prod="mosaded">
+    <div class="cgallery"><img class="cg-main" src="__PG_MOS_1__" alt="نظام مسدد">
+      <div class="cg-thumbs">
+        <button class="cg-th on" type="button" data-full="__PG_MOS_1__"><img src="__PG_MOS_1__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__PG_MOS_2__"><img src="__PG_MOS_2__" alt=""></button>
+        <button class="cg-th" type="button" data-full="__PG_MOS_3__"><img src="__PG_MOS_3__" alt=""></button>
+      </div></div>
+    <span class="pd-badge">للالتزامات</span>
+    <h3>مسدد</h3>
+    <p class="sector">ملف اكسل جاهز · تسليم فوري</p>
+    <div class="part"><p>برنامج متابعة الاقساط الذكي. كل اقساطك والتزاماتك المالية في مكان واحد يظهر لك المدفوع والمتبقي مع داشبورد بالاجمالي والمتبقي وتحليل شهري وصفحة ملخص ودليل استخدام مفصل.</p></div>
+    <ul class="feat">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>حتى 1,000 التزام و3,000 دفعة</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>داشبورد بالاجمالي والمتبقي</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>تحليل شهري وصفحة ملخص</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>دليل استخدام مفصل</li>
+    </ul>
+    <div class="pd-price num">179 <i>ريال · دفعة واحدة</i></div>
+    <a class="ask amber waorder" data-msg="مرحبا نواف، ابغى اطلب نظام مسدد" target="_blank" rel="noopener">اطلبه الان</a>
+    <p class="pd-note">تسليم فوري بعد الشراء مع ضمان استرجاع 14 يوم.</p>
+  </div>
+
+  <div data-prod="income">
+    <div class="cgallery"><img class="cg-main" src="__PG_INC_1__" alt="ادارة الدخل والمصروفات"></div>
+    <span class="pd-badge">بلغتين</span>
+    <h3>ادارة الدخل والمصروفات</h3>
+    <p class="sector">قالب اكسل · نسختان بلغتين</p>
+    <div class="part"><p>قالب بسيط يضبط دخلك ومصاريفك الشهرية بالعربية والانجليزية معًا. سجل شهري حتى 2,000 عملية مع داشبورد برسوم توضح مصاريفك وتصنيفات قابلة للتخصيص ونسختان بلغتين بشراء واحد.</p></div>
+    <ul class="feat">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>سجل شهري حتى 2,000 عملية</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>داشبورد برسوم توضح مصاريفك</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>تصنيفات قابلة للتخصيص</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>نسختان بلغتين بشراء واحد</li>
+    </ul>
+    <div class="pd-price num">99 <i>ريال · دفعة واحدة</i></div>
+    <a class="ask amber waorder" data-msg="مرحبا نواف، ابغى اطلب قالب الدخل والمصروفات" target="_blank" rel="noopener">اطلبه الان</a>
+    <p class="pd-note">تسليم فوري بعد الشراء مع ضمان استرجاع 14 يوم.</p>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="تفاصيل المشروع">
+  <div class="backdrop"></div>
+  <div class="sheet"></div>
+</div>
+
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* نواف الشريف — site behavior */
+(function(){
+  'use strict';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasGsap = typeof gsap !== 'undefined';
+  if (hasGsap && typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
+
+  /* ── hero transform scene ── */
+  const scene = document.getElementById('scene');
+  if (scene) {
+    const cv = document.getElementById('cv');
+    const ctx = cv.getContext('2d');
+    const hlA = document.getElementById('hlA');
+    const hlB = document.getElementById('hlB');
+
+    const lerp = (a,b,t)=>a+(b-a)*t;
+    const hex = h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+    const mix = (c1,c2,t)=>`rgb(${Math.round(lerp(c1[0],c2[0],t))},${Math.round(lerp(c1[1],c2[1],t))},${Math.round(lerp(c1[2],c2[2],t))})`;
+    const BG_D=hex('#0D1015'), BG_L=hex('#F4F5F1');
+    const TX_D=hex('#3A4250'), TX_L=hex('#B9BDB4');
+
+    let W,H,parts=[];
+    const DIGITS='0123456789'.split('');
+    function build(){
+      const dpr=Math.min(devicePixelRatio||1,2);
+      W=scene.clientWidth; H=scene.clientHeight;
+      cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+      parts=[];
+      const cols=Math.max(4,Math.floor(W/64)), rows=Math.max(4,Math.floor(H/64));
+      const gx=W/(cols+1), gy=H/(rows+1);
+      const cells=[];
+      for(let r=1;r<=rows;r++)for(let c=1;c<=cols;c++)cells.push([c*gx,r*gy]);
+      for(let i=cells.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cells[i],cells[j]]=[cells[j],cells[i]];}
+      const n=Math.min(cells.length,220);
+      for(let i=0;i<n;i++){
+        parts.push({
+          sx:Math.random()*W, sy:Math.random()*H,
+          tx:cells[i][0], ty:cells[i][1],
+          d:DIGITS[Math.floor(Math.random()*10)],
+          r:(Math.random()-.5)*1.6, s:12+Math.random()*10,
+          drift:Math.random()*Math.PI*2, amp:6+Math.random()*10,
+          accent:Math.random()<.06
+        });
+      }
+    }
+    let prog=0; const t0=performance.now();
+    const easeIO = t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+    function draw(){
+      const t=(performance.now()-t0)/1000;
+      const e=easeIO(prog);
+      ctx.clearRect(0,0,W,H);
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      for(const p of parts){
+        const wob=1-e;
+        const x=lerp(p.sx,p.tx,e)+Math.cos(t*.7+p.drift)*p.amp*wob;
+        const y=lerp(p.sy,p.ty,e)+Math.sin(t*.9+p.drift)*p.amp*wob;
+        ctx.save(); ctx.translate(x,y); ctx.rotate(p.r*(1-e));
+        ctx.font=`${lerp(p.s,13,e)}px 'IBM Plex Mono', ui-monospace, monospace`;
+        ctx.fillStyle=p.accent?'#2E5CFF':mix(TX_D,TX_L,e);
+        ctx.globalAlpha=p.accent?.9:.85;
+        ctx.fillText(p.d,0,0); ctx.restore();
+      }
+    }
+    if (reduce || !hasGsap) {
+      prog=1; build(); draw();
+      scene.style.background='#F4F5F1';
+      if(hlA) hlA.style.display='none';
+      if(hlB){ hlB.style.opacity=1; }
+      document.documentElement.setAttribute('data-reduced','');
+    } else {
+      build();
+      let rT; addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(build,150);});
+      gsap.ticker.add(draw);
+      ScrollTrigger.create({
+        trigger:scene, start:'top top', end:'+=220%', pin:true, scrub:.6,
+        onUpdate(self){
+          prog=self.progress;
+          scene.style.background=mix(BG_D,BG_L,easeIO(prog));
+          const a=1-Math.min(1,Math.max(0,(prog-.05)/.3));
+          const b=Math.min(1,Math.max(0,(prog-.55)/.35));
+          hlA.style.opacity=a; hlA.style.transform=`translateY(${(1-a)*-30}px)`;
+          hlB.style.opacity=b; hlB.style.transform=`translateY(${(1-b)*30}px)`;
+        }
+      });
+    }
+  }
+
+  /* ── scroll reveals ── */
+  const rvs=document.querySelectorAll('.rv');
+  if(reduce){ rvs.forEach(el=>{el.style.opacity=1;el.style.transform='none';}); }
+  else if(hasGsap && typeof ScrollTrigger!=='undefined'){
+    document.querySelectorAll('.metrics .m').forEach((el,i)=>{ el.dataset.rvd=(i*0.08).toFixed(2); });
+    rvs.forEach(el=>{
+      gsap.fromTo(el,{opacity:0,y:26},{opacity:1,y:0,duration:.8,ease:'power3.out',
+        delay:parseFloat(el.dataset.rvd||0),
+        scrollTrigger:{trigger:el,start:'top 87%'}});
+    });
+  } else {
+    const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){en.target.style.transition='opacity .7s,transform .7s';en.target.style.opacity=1;en.target.style.transform='none';io.unobserve(en.target);}});},{threshold:.12});
+    rvs.forEach(el=>io.observe(el));
+  }
+
+  /* ── nav scrolled state (waits for the pinned hero to lighten) ── */
+  const navEl=document.querySelector('.nav');
+  if(navEl){
+    const pinned=!!document.getElementById('scene') && !reduce && hasGsap;
+    const onScroll=()=>{
+      const th=pinned ? innerHeight*1.3 : 40;
+      navEl.classList.toggle('scrolled', (scrollY||pageYOffset)>th);
+    };
+    onScroll(); addEventListener('scroll',onScroll,{passive:true});
+  }
+
+  /* ── detail overlay (works + systems) ── */
+  const overlay=document.getElementById('overlay');
+  if(overlay){
+    const sheet=overlay.querySelector('.sheet');
+    const cases=document.getElementById('case-data');
+    const prods=document.getElementById('product-data');
+    const en=document.documentElement.lang==='en';
+    let lastFocus=null, sheetShots=[], sheetIndex=0;
+    const ICO_P='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
+    const ICO_N='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+    function wireSheet(){
+      sheet.querySelectorAll('a.waorder').forEach(a=>{
+        a.href='https://wa.me/966548767480?text='+encodeURIComponent(a.getAttribute('data-msg')||'');
+      });
+      const gal=sheet.querySelector('.cgallery');
+      const main=sheet.querySelector('.cg-main');
+      if(!gal||!main) return;
+      const thumbs=[...sheet.querySelectorAll('.cg-th')];
+      sheetShots=thumbs.length?thumbs.map(t=>t.getAttribute('data-full')):[main.getAttribute('src')];
+      let i=Math.max(0,thumbs.findIndex(t=>t.classList.contains('on')));
+      if(i<0) i=0;
+      function show(n){
+        i=(n+sheetShots.length)%sheetShots.length;
+        main.src=sheetShots[i];
+        thumbs.forEach((x,k)=>x.classList.toggle('on',k===i));
+        const c=gal.querySelector('.cg-count');
+        if(c) c.textContent=(i+1)+' / '+sheetShots.length;
+        sheetIndex=i;
+      }
+      thumbs.forEach((t,k)=>t.addEventListener('click',()=>show(k)));
+      if(sheetShots.length>1){
+        const stage=document.createElement('div');
+        stage.className='cg-stage';
+        main.parentNode.insertBefore(stage,main); stage.appendChild(main);
+        const prev=document.createElement('button'); prev.type='button'; prev.className='cg-nav cg-prev'; prev.innerHTML=ICO_P; prev.setAttribute('aria-label','السابق');
+        const next=document.createElement('button'); next.type='button'; next.className='cg-nav cg-next'; next.innerHTML=ICO_N; next.setAttribute('aria-label','التالي');
+        const cnt=document.createElement('span'); cnt.className='cg-count num';
+        stage.appendChild(prev); stage.appendChild(next); stage.appendChild(cnt);
+        prev.addEventListener('click',e=>{e.stopPropagation();show(i-1);});
+        next.addEventListener('click',e=>{e.stopPropagation();show(i+1);});
+      }
+      show(i);
+    }
+    function openDetail(src){
+      if(!src) return;
+      sheet.scrollTop=0;
+      sheet.innerHTML='<button class="close" type="button">'+(en?'Close ✕':'اغلاق ✕')+'</button>'+src.innerHTML;
+      overlay.classList.add('open');
+      document.body.style.overflow='hidden';
+      lastFocus=document.activeElement;
+      sheet.querySelector('.close').focus();
+      wireSheet();
+      if(!reduce && hasGsap){
+        gsap.fromTo(overlay.querySelector('.backdrop'),{opacity:0},{opacity:1,duration:.35,ease:'power2.out'});
+        gsap.fromTo(sheet,{xPercent:document.dir==='rtl'?-8:8,opacity:0},{xPercent:0,opacity:1,duration:.45,ease:'power3.out'});
+      }
+    }
+    function closeDetail(){
+      const done=()=>{
+        overlay.classList.remove('open');
+        document.body.style.overflow='';
+        if(lastFocus) lastFocus.focus();
+      };
+      if(!reduce && hasGsap){
+        gsap.to(overlay.querySelector('.backdrop'),{opacity:0,duration:.25,ease:'power2.in'});
+        gsap.to(sheet,{xPercent:document.dir==='rtl'?-6:6,opacity:0,duration:.28,ease:'power2.in',onComplete:done});
+      } else done();
+    }
+    document.querySelectorAll('[data-open-case]').forEach(b=>{
+      b.addEventListener('click',()=>openDetail(cases && cases.querySelector('[data-case="'+b.dataset.openCase+'"]')));
+    });
+    const PIDS=['free','store','ribhi','mosaded','income'];
+    document.querySelectorAll('.prod').forEach((card,i)=>{
+      const id=PIDS[i]; if(!id) return;
+      card.setAttribute('data-open-prod',id);
+      if(!card.querySelector('.more')){
+        const more=document.createElement('span');
+        more.className='more';
+        more.innerHTML=(en?'View details ':'التفاصيل والصور ')+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="'+(en?'M9 6l6 6-6 6':'M15 6l-6 6 6 6')+'"/></svg>';
+        const link=card.querySelector('a'); if(link) card.insertBefore(more,link); else card.appendChild(more);
+      }
+      card.tabIndex=0;
+      card.setAttribute('role','button');
+      const open=()=>openDetail(prods && prods.querySelector('[data-prod="'+id+'"]'));
+      card.addEventListener('click',e=>{ if(e.target.closest('a')) return; open(); });
+      card.addEventListener('keydown',e=>{
+        if(e.target!==card) return;
+        if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); }
+      });
+    });
+    /* archive rows -> same detail sheet */
+    const PH={dash:'__PH_DASH__',sys:'__PH_SYS__',rep:'__PH_REP__',study:'__PH_STUDY__',auto:'__PH_AUTO__'};
+    document.querySelectorAll('.arow').forEach(row=>{
+      const head=row.querySelector('.arow-head'); if(!head) return;
+      const cid=row.getAttribute('data-case');
+      head.addEventListener('click',()=>{
+        if(cid && cases && cases.querySelector('[data-case="'+cid+'"]')){
+          openDetail(cases.querySelector('[data-case="'+cid+'"]')); return;
+        }
+        const title=(head.querySelector('.t')||{}).textContent||'';
+        const cat=(head.querySelector('.cat')||{}).textContent||'';
+        const stat=(head.querySelector('.stat')||{}).textContent||'';
+        const pad=row.querySelector('.arow-pad');
+        const parts=pad?[...pad.querySelectorAll('.part')].map(x=>x.outerHTML).join(''):'';
+        const q=pad?pad.querySelector('.quote'):null;
+        const sector=q?q.childNodes[0].textContent.trim():'';
+        const img=PH[row.getAttribute('data-cat')]||PH.dash;
+        const tmp=document.createElement('div');
+        tmp.innerHTML='<div class="cgallery"><img class="cg-main" src="'+img+'" alt=""></div>'+
+          '<span class="cat-tag">'+cat+(stat?' · '+stat:'')+'</span>'+
+          '<h3>'+title+'</h3>'+
+          (sector?'<p class="sector">'+sector+'</p>':'')+
+          parts+
+          '<a class="ask waorder" data-msg="'+(en?'Hello Nawaf, I saw this project on your site and I want something similar':'مرحبا نواف، شفت هذا العمل في موقعك واريد شي مشابه')+'" target="_blank" rel="noopener">'+(en?'I want something similar':'اريد عمل مشابه')+'</a>'+
+          '<p class="pd-note">'+(en?'Illustrative cover; project screenshots to be added.':'صورة توضيحية للعمل، ولقطات المشروع تضاف لاحقًا.')+'</p>';
+        openDetail(tmp);
+      });
+    });
+
+    overlay.addEventListener('click',e=>{
+      if(e.target.classList.contains('backdrop')||e.target.classList.contains('close')) closeDetail();
+    });
+    addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.contains('open')&&!document.querySelector('.lightbox.open')) closeDetail(); });
+  }
+
+  /* ── full-image lightbox (all gallery images) ── */
+  const lb=document.createElement('div');
+  lb.className='lightbox';
+  lb.innerHTML='<button class="lb-close" type="button" aria-label="اغلاق">✕</button><button class="lb-nav lb-prev" type="button" aria-label="السابق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><img alt=""><button class="lb-nav lb-next" type="button" aria-label="التالي"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button><div class="lb-hint">اضغط في اي مكان للاغلاق</div>';
+  document.body.appendChild(lb);
+  const lbImg=lb.querySelector('img');
+  if(document.documentElement.lang==='en') lb.querySelector('.lb-hint').textContent='Click anywhere to close';
+  function openLB(src,alt){
+    lbImg.src=src; lbImg.alt=alt||'';
+    lb.classList.add('open');
+    if(!reduce&&hasGsap){
+      gsap.fromTo(lb,{opacity:0},{opacity:1,duration:.22,ease:'power2.out'});
+      gsap.fromTo(lbImg,{scale:.94},{scale:1,duration:.3,ease:'power3.out'});
+    }
+  }
+  function closeLB(){
+    if(!reduce&&hasGsap){
+      gsap.to(lb,{opacity:0,duration:.18,ease:'power2.in',onComplete:()=>{lb.classList.remove('open');gsap.set(lb,{opacity:1});}});
+    } else lb.classList.remove('open');
+  }
+  const lbPrev=lb.querySelector('.lb-prev'), lbNext=lb.querySelector('.lb-next');
+  let lbList=[], lbIdx=0;
+  function lbShow(n){
+    if(!lbList.length) return;
+    lbIdx=(n+lbList.length)%lbList.length;
+    lbImg.src=lbList[lbIdx];
+    const multi=lbList.length>1;
+    lbPrev.style.display=multi?'grid':'none';
+    lbNext.style.display=multi?'grid':'none';
+  }
+  lbPrev.addEventListener('click',e=>{e.stopPropagation();lbShow(lbIdx-1);});
+  lbNext.addEventListener('click',e=>{e.stopPropagation();lbShow(lbIdx+1);});
+  lb.addEventListener('click',e=>{ if(e.target===lbImg||e.target.closest('.lb-nav')) return; closeLB(); });
+  document.addEventListener('click',e=>{
+    const im=e.target.closest('.sheet .cg-main');
+    if(!im) return;
+    const ths=[...document.querySelectorAll('.sheet .cg-th')];
+    lbList=ths.length?ths.map(t=>t.getAttribute('data-full')):[im.src];
+    let k=ths.findIndex(t=>t.classList.contains('on')); if(k<0) k=0;
+    openLB(im.src,im.alt);
+    lbShow(k);
+  });
+  addEventListener('keydown',e=>{
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') closeLB();
+    else if(e.key==='ArrowLeft') lbShow(lbIdx+ (document.dir==='rtl'?-1:1));
+    else if(e.key==='ArrowRight') lbShow(lbIdx+ (document.dir==='rtl'?1:-1));
+  });
+
+  /* ── archive rows open the full detail sheet ── */
+  const filterBtns=document.querySelectorAll('.filters button');
+  if(filterBtns.length){
+    filterBtns.forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        filterBtns.forEach(b=>b.classList.remove('on'));
+        btn.classList.add('on');
+        const f=btn.dataset.filter;
+        document.querySelectorAll('.arow').forEach(r=>{
+          r.classList.toggle('hide', f!=='all' && r.dataset.cat!==f);
+        });
+      });
+    });
+  }
+
+  /* ── archive thumbnails by category ── */
+  const CATIMG={dash:'__CAT_DASH__',sys:'__CAT_SYS__',rep:'__CAT_REP__',study:'__CAT_STUDY__',auto:'__CAT_AUTO__'};
+  document.querySelectorAll('.arow').forEach(row=>{
+    const head=row.querySelector('.arow-head'); if(!head) return;
+    const t=head.querySelector('.t'); if(!t||head.querySelector('.arow-thumb')) return;
+    const cat=row.getAttribute('data-cat')||'dash';
+    const thumb=document.createElement('span'); thumb.className='arow-thumb';
+    thumb.style.backgroundImage='url('+(CATIMG[cat]||CATIMG.dash)+')';
+    const main=document.createElement('span'); main.className='arow-main';
+    head.insertBefore(main,t); main.appendChild(thumb); main.appendChild(t);
+  });
+
+  /* ── mobile menu ── */
+  const burger=document.querySelector('.burger');
+  const mmenu=document.querySelector('.mmenu');
+  if(burger&&mmenu){
+    burger.addEventListener('click',()=>mmenu.classList.add('open'));
+    mmenu.addEventListener('click',e=>{
+      if(e.target.tagName==='A'||e.target.classList.contains('close')) mmenu.classList.remove('open');
+    });
+  }
+
+  /* ── marquee duplication ── */
+  document.querySelectorAll('.marquee').forEach(mq=>{
+    if(reduce) return;
+    mq.innerHTML+=mq.innerHTML;
+  });
+
+  /* ── contact form → WhatsApp ── */
+  const form=document.getElementById('contact-form');
+  if(form){
+    form.addEventListener('submit',e=>{
+      e.preventDefault();
+      const en=document.documentElement.lang==='en';
+      const name=form.querySelector('[name=name]').value.trim();
+      const biz=form.querySelector('[name=biz]').value.trim();
+      const msg=form.querySelector('[name=msg]').value.trim();
+      const text=en
+        ? `Hello Nawaf, I came from your website.\nName: ${name}\nBusiness: ${biz}\nSituation: ${msg}`
+        : `مرحبا نواف، وصلتك من موقعك.\nالاسم: ${name}\nالنشاط: ${biz}\nوصف الحالة: ${msg}`;
+      window.open('https://wa.me/966548767480?text='+encodeURIComponent(text),'_blank','noopener');
+    });
+  }
+})();
+
+/* smooth-scroll archive nav + close mobile menu */
+document.querySelectorAll('a[href="#archive"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var t=document.getElementById('archive');if(t)t.scrollIntoView({behavior:'smooth'});var m=document.querySelector('.mmenu');if(m)m.classList.remove('open');});});
+</script>
