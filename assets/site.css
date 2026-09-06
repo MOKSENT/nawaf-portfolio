@@ -1,4 +1,9 @@
 /* نواف الشريف · من التبعثر الى النظام · site.css */
+/* رمز الريال السعودي U+20C1 · خط Saudi Riyal Font بترخيص SIL OFL 1.1 · Emran Alhaddad
+   github.com/emran-alhaddad/Saudi-Riyal-Font · النسخة هنا مقتصرة على الرمز وحده
+   الترخيص كامل في source/assets/fonts/LICENSE-saudi-riyal-font.txt */
+@font-face{font-family:'SaudiRiyal';src:url(data:font/woff2;base64,d09GMgABAAAAAAHEAAsAAAAAA7AAAAF4AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmAANBEICoEUgR4BNgIkAwgLBgAEIAWCFgcgG/ECIIYHaB30b2ZxgPYkJtjZrkRkgrMiES/dx//d5I83lsC1LABPIIEJNJZFiSY8JkW9KPMsSndIWn01ihHtkGRpOCQj7on3sK/6hLc6hqhYBJN9A4r7uDUv/98IsmcgQFICFAIiElSVCKZSBaTBQHH////j+bcDBED4/38RRJAioiWGA1JAzBuvmvdm0uyXixyFeZbk5fg4PnOks1+On+eCW+0nnQxhUnySXZpSf0g+6uLUBkNPN6g/KB89aujOJn3rDSrR67+MatljyNGtdWaPadltSLnm/RoMz4ePG3514WhFcuO4HxeGLLhZ7QR+UAEICGxpPPj3rAp9/pQsUxJ8+jSu43gge5E9Q0kRBF7m/RV0CPiBmBwmfaaTgGiJFAQcKmGqREhLoWDVQXWFjsrrphNtDNGpZlbrTHTifK6JUwqFoVZYa46VCgMtt9gc880fYJ17g/mWmGXt+2wxx3JrLbDIBsvNsVahl0JcUmQawuadTrdPEAA=) format('woff2');font-weight:400;font-style:normal;font-display:swap;unicode-range:U+20C1}
+@font-face{font-family:'SaudiRiyal';src:url(data:font/woff2;base64,d09GMk9UVE8AAAJMAAkAAAAABFwAAAIFAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAADYMmBmAALAE2AiQDCAQGBYF+ByAbtwMgHoexMzoMwcrKsaOiPiL62jd73u7n1khqFUJiNJLCaZLbyQgTdxlxG5PKD+ved3cf0ohro0KU8ca2JTAiCW11aREK6QvZRKU8cU3+bs7zv3fLVWEFSCQ1zlJ8I0gqoBlNt0mV+HQMTLRZx9Nd0QsSQtJXM1DfUtXbMlLT/tSe+8okpwGcRtJpopxmhqlodibsxWwSr/nxqoCNaGCJDEwP0xEiRmeKzBEuBWYIqSw4ji4rr9zZ1f9/wWk8TfMkLbKU95cgN1AF0SNwh4kMjNe/sm3l1uPu3d4VB9GZ9o/IWSyeLBuq5CB602lEjjPd4VMifHcq0ZTQcSR5NF0ieqLHJpYm52c4CYWCsNkz2tsz0j6fTvDT2lsPO/eEVYfn/TQ4k/jJ9etJXkfQ9xPOg57z6+vLxzMP7rV6jdGcARHABfwAjxY/3m6jl0yWDlVVPTcqzel7eNnnqjgiaDVLbMFE3ZN3wKN5Tj7QIQF0IZwakDVeZJYl8hcBTC9AhNbm8JFogo1uAF0XxnMgYLg+soCAf4Wnk7qKKnGajUNxAH5/69DS9E4nNtUVigD+Y8rxfbVt0F8AR1CYO6Okc4EBtnZsWeyycLCbvQy7G+rtSbm8P7OzCINFvg69anSyyNauWY169QbQ5xxQr0WVXueIGu1qdV2mnkUKS1jWopuFbEMT7U4BAAAA) format('woff2');font-weight:700;font-style:normal;font-display:swap;unicode-range:U+20C1}
 :root{
   --dark:#0D1015; --dark2:#12161D;
   --light:#F4F5F1; --light2:#ECEDE7;
@@ -8,19 +13,20 @@
   --blue-tint:#EEF2FF; --blue-line:#DCE3FF;
   --amber:#C67E24; --amber-soft:#F7F0E3; --amber-line:#EADCC2;
   --line-l:#DCDED7; --line-d:rgba(255,255,255,.09);
-  --sans:'IBM Plex Sans Arabic','IBM Plex Sans',system-ui,sans-serif;
+  --sans:'SaudiRiyal','IBM Plex Sans Arabic','IBM Plex Sans',system-ui,sans-serif;
   --mono:'IBM Plex Mono',ui-monospace,monospace;
   --shadow-sm:0 2px 12px rgba(20,23,28,.05);
   --shadow:0 22px 50px rgba(20,23,28,.10);
   --ease-out:cubic-bezier(.22,1,.36,1);
   --ease-io:cubic-bezier(.65,0,.35,1);
 }
-html[lang="en"]{--sans:'IBM Plex Sans','IBM Plex Sans Arabic',system-ui,sans-serif}
+html[lang="en"]{--sans:'SaudiRiyal','IBM Plex Sans','IBM Plex Sans Arabic',system-ui,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--dark);font-family:var(--sans);color:var(--ink);font-size:16px;line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-weight:400}
 ::selection{background:var(--blue);color:#fff}
-.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.num{font-variant-numeric:tabular-nums}
+.numltr{direction:ltr;unicode-bidi:isolate}
 img{max-width:100%}
 a{-webkit-tap-highlight-color:transparent}
 h1,h2,h3,h4{font-weight:700}
